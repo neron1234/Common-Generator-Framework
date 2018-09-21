@@ -1,0 +1,379 @@
+{
+  "entities": [
+    {
+      "id": "Identifier",
+      "isAbstract": true,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "Id",
+          "type": "integer",
+          "isKey": true,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Card",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "PublicationDate",
+          "type": "date",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Content",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Type",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [
+        {
+          "id": "CreatedBy",
+          "foreignKey": "UserId",
+          "type": "UserProfile",
+          "isCollection": false,
+          "isRequired": false
+        },
+        {
+          "id": "Photo",
+          "foreignKey": "Id",
+          "type": "Photo",
+          "isCollection": false,
+          "isRequired": false
+        },
+        {
+          "id": "TargetGroups",
+          "foreignKey": "Id",
+          "type": "Group",
+          "isCollection": true,
+          "isRequired": false
+        },
+        {
+          "id": "Choices",
+          "foreignKey": "Id",
+          "type": "Choice",
+          "isCollection": true,
+          "isRequired": false
+        }
+      ],
+      "values": []
+    },
+    {
+      "id": "Idea",
+      "extends": "Card",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "EndDate",
+          "type": "date",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Group",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "Name",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "GroupDepartment",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "City",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "CreationDate",
+          "type": "date",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Country",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [
+        {
+          "id": "CreatedBy",
+          "foreignKey": "UserId",
+          "type": "UserProfile",
+          "isCollection": false,
+          "isRequired": false
+        },
+        {
+          "id": "Users",
+          "foreignKey": "UserId",
+          "type": "UserProfile",
+          "isCollection": true,
+          "isRequired": false
+        }
+      ],
+      "values": []
+    },
+    {
+      "id": "UserProfile",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "UserId",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Job",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Department",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "City",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Country",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Choice",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "Name",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Answer",
+      "extends": "Identifier",
+      "isAbstract": true,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "AnswerDate",
+          "type": "date",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [
+        {
+          "id": "AnsweredBy",
+          "foreignKey": "UserId",
+          "type": "UserProfile",
+          "isCollection": false,
+          "isRequired": false
+        }
+      ],
+      "values": []
+    },
+    {
+      "id": "IdeaAnswer",
+      "extends": "Answer",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [],
+      "references": [
+        {
+          "id": "IdeaCard",
+          "foreignKey": "Id",
+          "type": "Idea",
+          "isCollection": false,
+          "isRequired": false
+        },
+        {
+          "id": "IdeaChoice",
+          "foreignKey": "Id",
+          "type": "Choice",
+          "isCollection": false,
+          "isRequired": false
+        }
+      ],
+      "values": []
+    },
+    {
+      "id": "Reporting",
+      "extends": "Card",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "Results",
+          "type": "number",
+          "isKey": false,
+          "isCollection": true,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "Views",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "IdCard",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Photo",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "Url",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    }
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "id": "Post",
+  "description": "Post",
+  "actions": [
+    {
+      "id": "uploadPicture",
+      "parameters": [
+        {
+          "id": "picture",
+          "type": "Picture",
+          "dataModel": {
+            "id": "Picture",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [
+              {
+                "id": "url",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": "Photo.Url"
+              }
+            ],
+            "references": [],
+            "values": []
+          }
+        }
+      ],
+      "type": "datacreate",
+      "url": "/api/post/uploadPicture",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "getDefaultPicture",
+      "parameters": [],
+      "type": "dataget",
+      "url": "/api/post/getDefaultPicture",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Picture",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "url",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Photo.Url"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "get",
+      "parameters": [
+        {
+          "id": "id",
+          "type": "integer"
+        }
+      ],
+      "type": "dataget",
+      "url": "/api/post/get",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Card",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "card",
+            "foreignKey": "Id",
+            "type": "Card",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "getLatestsPostsByUser",
+      "parameters": [
+        {
+          "id": "idUser",
+          "type": "integer"
+        }
+      ],
+      "type": "datalist",
+      "url": "/api/post/listByUser",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Cards",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "cards",
+            "foreignKey": "Id",
+            "type": "Card",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "update",
+      "parameters": [
+        {
+          "id": "post",
+          "type": "Card",
+          "dataModel": {
+            "id": "Card",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [],
+            "references": [
+              {
+                "id": "card",
+                "foreignKey": "Id",
+                "type": "Card",
+                "isCollection": false,
+                "isRequired": false
+              }
+            ],
+            "values": []
+          }
+        }
+      ],
+      "type": "dataupdate",
+      "url": "/api/post/update",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "getTopPostsByUser",
+      "parameters": [
+        {
+          "id": "idUser",
+          "type": "integer"
+        }
+      ],
+      "type": "datalist",
+      "url": "/api/post/listTopByUser",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Cards",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "cards",
+            "foreignKey": "Id",
+            "type": "Card",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "delete",
+      "parameters": [
+        {
+          "id": "id",
+          "type": "integer"
+        }
+      ],
+      "type": "datadelete",
+      "url": "/api/post/delete",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    }
+  ]
+}

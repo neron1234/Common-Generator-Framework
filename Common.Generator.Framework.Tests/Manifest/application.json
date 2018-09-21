@@ -1,0 +1,49 @@
+{
+  "id": "MeteoMeter",
+  "title": "MeteoMeter",
+  "smallTitle": "MeteoMeter",
+  "description": "MeteoMeter SmartApp",
+  "platforms": [
+    "BackEnd",
+    "FrontEnd"
+  ],
+  "version": "1.0.0.0",
+  "themes": [
+    "Dark",
+    "Light"
+  ],
+  "languages": [
+    "fr",
+    "en"
+  ],
+  "$schema": "http://meteometer.com",
+  "addons": "addons.json",
+  "api": [
+    "api/Group.json",
+    "api/Idea.json",
+    "api/User.json",
+    "api/Post.json",
+    "api/Flow.json",
+    "api/Highlights.json"
+  ],
+  "concerns": [
+    "concerns/Idea.json",
+    "concerns/Report.json",
+    "concerns/Account.json",
+    "concerns/ManageGroups.json",
+    "concerns/Flow.json",
+    "concerns/Highlights.json",
+    "concerns/Notifications.json",
+    "concerns/Posts.json",
+    "concerns/Login.json",
+    "concerns/Tabs.json",
+    "concerns/Settings.json"
+  ],
+  "configurations": [
+    {
+      "type": "dev",
+      "Path": "configurations\\configuration.dev.json"
+    }
+  ],
+  "data": "data.json"
+}

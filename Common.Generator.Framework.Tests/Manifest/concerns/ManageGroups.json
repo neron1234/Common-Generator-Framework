@@ -1,0 +1,248 @@
+{
+  "id": "ManageGroups",
+  "title": "ManageGroups",
+  "description": "ManageGroups",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "main",
+      "title": "manageGroups",
+      "description": "manageGroups",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "getGroups",
+          "type": "DataList",
+          "target": "",
+          "api": "Group.list"
+        },
+        {
+          "id": "toCreateGroup",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "toGroupDetails",
+          "type": "Navigation",
+          "target": "ManageGroups.groupDetails",
+          "api": ""
+        },
+        {
+          "id": "delete",
+          "type": "DataDelete",
+          "target": "",
+          "api": "Group.delete"
+        },
+        {
+          "id": "toEditGroup",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Groups",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "groups",
+            "foreignKey": "Id",
+            "type": "Group",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "createGroupModal",
+      "title": "createGroupModal",
+      "description": "createGroupModal",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "save",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Group.create"
+        },
+        {
+          "id": "cancel",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "toGroupDetails",
+          "type": "Navigation",
+          "target": "ManageGroups.groupDetails",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Group",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "group",
+            "foreignKey": "Id",
+            "type": "Group",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "groupDetails",
+      "title": "groupMemebers",
+      "description": "groupMemebers",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "toAddMemberModal",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "removeMember",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "Group.removeMember"
+        }
+      ]
+    },
+    {
+      "id": "addMemberModal",
+      "title": "addMemberModal",
+      "description": "addMemberModal",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "searchUser",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "addMember",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "Group.addMember"
+        },
+        {
+          "id": "getMembers",
+          "type": "DataList",
+          "target": "",
+          "api": "User.list"
+        }
+      ],
+      "dataModel": {
+        "id": "User",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "firstname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "lastname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "pictureUrl",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "facebookId",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [
+          {
+            "id": "user",
+            "foreignKey": "Id",
+            "type": "UserProfile",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "editGroupModal",
+      "title": "createGroupModal",
+      "description": "createGroupModal",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "updateGroup",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "Group.update"
+        },
+        {
+          "id": "cancel",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Group",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "group",
+            "foreignKey": "Id",
+            "type": "Group",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "id": "Idea",
+  "description": "Idea Api",
+  "actions": [
+    {
+      "id": "list",
+      "parameters": [],
+      "type": "datalist",
+      "url": "/api/idea/listIdea",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Ideas",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "ideas",
+            "foreignKey": "Id",
+            "type": "Idea",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "delete",
+      "parameters": [
+        {
+          "id": "idIdea",
+          "type": "integer"
+        }
+      ],
+      "type": "datadelete",
+      "url": "/api/idea/delete",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "update",
+      "parameters": [
+        {
+          "id": "idea",
+          "type": "Idea",
+          "dataModel": {
+            "id": "Idea",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [],
+            "references": [
+              {
+                "id": "idea",
+                "foreignKey": "Id",
+                "type": "Idea",
+                "isCollection": false,
+                "isRequired": false
+              }
+            ],
+            "values": []
+          }
+        }
+      ],
+      "type": "dataupdate",
+      "url": "/api/idea/updateIdea",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "create",
+      "parameters": [
+        {
+          "id": "idea",
+          "type": "Idea",
+          "dataModel": {
+            "id": "Idea",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [],
+            "references": [
+              {
+                "id": "idea",
+                "foreignKey": "Id",
+                "type": "Idea",
+                "isCollection": false,
+                "isRequired": false
+              }
+            ],
+            "values": []
+          }
+        }
+      ],
+      "type": "datacreate",
+      "url": "/api/idea/create",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "AddOn",
+    "title": "AddOn",
+    "configuration": {
+      "key": "Configuration",
+      "title": "Configuration",
+      "defaultValue": "Configuration"
+    }
+  }
+]

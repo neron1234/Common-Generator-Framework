@@ -1,0 +1,39 @@
+{
+  "id": "Report",
+  "title": "Report",
+  "description": "Report concern",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "flowReport",
+      "title": "flowReport",
+      "description": "flowReport",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "displayResult",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Report",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "reporting",
+            "foreignKey": "Id",
+            "type": "Reporting",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    }
+  ]
+}

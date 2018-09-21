@@ -1,0 +1,35 @@
+{
+  "id": "Flow",
+  "description": "Flow",
+  "actions": [
+    {
+      "id": "list",
+      "parameters": [
+        {
+          "id": "idUser",
+          "type": "integer"
+        }
+      ],
+      "type": "datalist",
+      "url": "/api/flow/list",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Cards",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "cards",
+            "foreignKey": "Id",
+            "type": "Card",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "id": "Idea",
+  "title": "Idea",
+  "description": "Idea concern",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "createIdeaQuestion",
+      "title": "create idea ",
+      "description": "create idea ",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "next",
+          "type": "Navigation",
+          "target": "Idea.createIdeaSettings",
+          "api": ""
+        },
+        {
+          "id": "discard",
+          "type": "Navigation",
+          "target": "Posts.chooseNewPostCategory",
+          "api": ""
+        },
+        {
+          "id": "uploadPicture",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Post.uploadPicture"
+        },
+        {
+          "id": "getDefaultPicture",
+          "type": "DataGet",
+          "target": "",
+          "api": "Post.getDefaultPicture"
+        }
+      ]
+    },
+    {
+      "id": "flowIdea",
+      "title": "flowIdea",
+      "description": "flowIdea",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "agree",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "disagree",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Idea",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "idea",
+            "foreignKey": "Id",
+            "type": "Idea",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "preview",
+      "title": "preview",
+      "description": "preview",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "save",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Idea.create"
+        }
+      ],
+      "dataModel": {
+        "id": "Idea",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "idea",
+            "foreignKey": "Id",
+            "type": "Idea",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "createIdeaSettings",
+      "title": "createIdeaSettings",
+      "description": "createIdeaSettings",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "toPreview",
+          "type": "Navigation",
+          "target": "Idea.preview",
+          "api": ""
+        }
+      ]
+    }
+  ]
+}

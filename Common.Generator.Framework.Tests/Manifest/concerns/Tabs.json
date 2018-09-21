@@ -1,0 +1,23 @@
+{
+  "id": "Tabs",
+  "title": "Tabs",
+  "description": "Tabs",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "main",
+      "title": "Tabs",
+      "description": "Tabs",
+      "isVisibleInMenu": false,
+      "isRoot": true,
+      "actions": [
+        {
+          "id": "countUnreadNotifications",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    }
+  ]
+}

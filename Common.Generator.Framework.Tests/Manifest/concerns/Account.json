@@ -1,0 +1,176 @@
+{
+  "id": "Account",
+  "title": "Account",
+  "description": "Account",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "main",
+      "title": "Account",
+      "description": "Account ",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "getUser",
+          "type": "DataGet",
+          "target": "",
+          "api": "User.get"
+        },
+        {
+          "id": "toEditProfile",
+          "type": "Navigation",
+          "target": "Account.editProfile",
+          "api": ""
+        },
+        {
+          "id": "toManageGroups",
+          "type": "Navigation",
+          "target": "ManageGroups.main",
+          "api": ""
+        },
+        {
+          "id": "toSettings",
+          "type": "Navigation",
+          "target": "Settings.main",
+          "api": ""
+        },
+        {
+          "id": "signOut",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "User",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "firstname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "lastname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "pictureUrl",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "facebookId",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [
+          {
+            "id": "user",
+            "foreignKey": "Id",
+            "type": "UserProfile",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "editProfile",
+      "title": "editprofile",
+      "description": "editprofile ",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "updateUser",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "User.update"
+        }
+      ],
+      "dataModel": {
+        "id": "User",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "firstname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "lastname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "pictureUrl",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "facebookId",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [
+          {
+            "id": "user",
+            "foreignKey": "Id",
+            "type": "UserProfile",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    }
+  ]
+}

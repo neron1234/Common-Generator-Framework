@@ -1,0 +1,142 @@
+{
+  "id": "Login",
+  "title": "Login",
+  "description": "Login",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "main",
+      "title": "login",
+      "description": "login",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "getUser",
+          "type": "DataGet",
+          "target": "",
+          "api": "User.signIn"
+        },
+        {
+          "id": "toTabs",
+          "type": "Navigation",
+          "target": "Tabs.main",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "SignIn",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "email",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "password",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "forgotPassword",
+      "title": "forgotPassword",
+      "description": "forgotPassword",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "checkEmail",
+          "type": "DataGet",
+          "target": "",
+          "api": "User.checkEmail"
+        },
+        {
+          "id": "sendMail",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "Email",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "email",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "resetPassword",
+      "title": "resetPassword",
+      "description": "resetPassword",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "updateUser",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "User.update"
+        }
+      ],
+      "dataModel": {
+        "id": "SignIn",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "email",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "password",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    }
+  ]
+}

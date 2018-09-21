@@ -1,0 +1,172 @@
+{
+  "id": "Highlights",
+  "description": "Highlights",
+  "actions": [
+    {
+      "id": "GetTopPosts",
+      "parameters": [],
+      "type": "datalist",
+      "url": "/api/highlights/getTopPosts",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "TopPosts",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "views",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": true,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "answers",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": true,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [
+          {
+            "id": "cards",
+            "foreignKey": "Id",
+            "type": "Card",
+            "isCollection": true,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    },
+    {
+      "id": "getBestContributor",
+      "parameters": [],
+      "type": "dataget",
+      "url": "/api/highlights/getBestContributor",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "BestContributor",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "posts",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "answers",
+            "type": "number",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "pictureUrl",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "firstname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "lastname",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "department",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "UserProfile.Department"
+          },
+          {
+            "id": "city",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "UserProfile.City"
+          },
+          {
+            "id": "country",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "UserProfile.Country"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "getBestIdea",
+      "parameters": [],
+      "type": "dataget",
+      "url": "/api/highlights/getBestIdea",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "Report",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [],
+        "references": [
+          {
+            "id": "reporting",
+            "foreignKey": "Id",
+            "type": "Reporting",
+            "isCollection": false,
+            "isRequired": false
+          }
+        ],
+        "values": []
+      }
+    }
+  ]
+}

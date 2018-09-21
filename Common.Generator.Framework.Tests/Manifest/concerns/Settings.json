@@ -1,0 +1,80 @@
+{
+  "id": "Settings",
+  "title": "Settings",
+  "description": "Settings",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "main",
+      "title": "Setting",
+      "description": "Setting",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "toNotifications",
+          "type": "Navigation",
+          "target": "Settings.notifications",
+          "api": ""
+        },
+        {
+          "id": "toEmailNotifications",
+          "type": "Navigation",
+          "target": "Settings.EmailNotifications",
+          "api": ""
+        },
+        {
+          "id": "toApplicationSettings",
+          "type": "Navigation",
+          "target": "Settings.ApplicationSettings",
+          "api": ""
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "title": "notifications",
+      "description": "notifications",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "change",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    },
+    {
+      "id": "EmailNotifications",
+      "title": "EmailNotifications",
+      "description": "EmailNotifications",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "change",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    },
+    {
+      "id": "ApplicationSettings",
+      "title": "ApplicationSettings",
+      "description": "ApplicationSettings",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "change",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    }
+  ]
+}
