@@ -8,6 +8,23 @@ namespace Common.Generator.Framework.Extensions
     public static class ConcernListExtension
     {
         /// <summary>
+        /// Check if there is at least one menu in the list of concerns.
+        /// </summary>
+        /// <param name="concerns">A ConcernList object.</param>
+        /// <returns>A boolean.</returns>
+        public static bool HasMenu(this ConcernList concerns)
+        {
+            if (concerns.AsEnumerable() == null)
+                throw new ArgumentNullException();
+
+            foreach (ConcernInfo concern in concerns.AsEnumerable())
+                if (concern.GetMenu().AsEnumerable().Count() > 0)
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
         /// Retrieve all direct references from concerns.
         /// </summary>
         /// <param name="concerns">A ConcernList object.</param>

@@ -35,9 +35,8 @@ namespace Common.Generator.Framework.Extensions
                 throw new ArgumentNullException();
 
             if (smartApp.Concerns.AsEnumerable() != null)
-                foreach (ConcernInfo concern in smartApp.Concerns.AsEnumerable())
-                    if (concern.GetMenu().AsEnumerable().Count() > 0)
-                        return true;
+                return smartApp.Concerns.HasMenu();
+
             return false;
         }
 
@@ -75,22 +74,28 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> specifiedModels = new List<EntityInfo>();
             List<EntityInfo> usedModels = new List<EntityInfo>();
 
-            // Search for references in layout's datamodels
-            if (smartApp.Concerns.AsEnumerable() != null)
-                specifiedModels.Union(smartApp.Concerns.GetConcernListDirectReferences());
+            if (smartApp.Version != null
+                && smartApp.DataModel != null
+                && smartApp.DataModel.Entities.AsEnumerable() != null
+                && smartApp.Concerns.AsEnumerable() != null)
+            {
+                // Search for references in layout's datamodels
+                if (smartApp.Concerns.AsEnumerable() != null)
+                    specifiedModels.Union(smartApp.Concerns.GetConcernListDirectReferences());
 
-            // Search for references in api's datamodels
-            if (smartApp.Api.AsEnumerable() != null)
-                specifiedModels.Union(smartApp.Api.GetApiListDirectReferences());
+                // Search for references in api's datamodels
+                if (smartApp.Api.AsEnumerable() != null)
+                    specifiedModels.Union(smartApp.Api.GetApiListDirectReferences());
 
-            // Get indirect references.
-            foreach (EntityInfo entity in specifiedModels.AsEnumerable())
-                if (entity.Id != null)
-                {
-                    usedModels.Union(entity.GetEntityIndirectReferences());
-                }
+                // Get indirect references.
+                foreach (EntityInfo entity in specifiedModels.AsEnumerable())
+                    if (entity.Id != null)
+                    {
+                        usedModels.Union(entity.GetEntityIndirectReferences());
+                    }
 
-            usedModels.Union(specifiedModels.AsEnumerable());
+                usedModels.Union(specifiedModels.AsEnumerable());
+            }
 
             return usedModels;
         }

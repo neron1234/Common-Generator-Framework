@@ -46,6 +46,42 @@ namespace Common.Generator.Framework.Extensions
         }
 
         /// <summary>
+        /// Retrieve the targeted concern in the case of a navigation action.
+        /// </summary>
+        /// <param name="action">An ActonInfo object.</param>
+        /// <returns>A concern id.</returns>
+        public static string GetTargetedConcern(this ActionInfo action)
+        {
+            if (action == null)
+                throw new ArgumentNullException();
+
+            char delimiter = '.';
+
+            if (action.Target != null)
+                return action.Target.Split(delimiter)[0];
+
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieve the targeted layout in the case of a navigation action.
+        /// </summary>
+        /// <param name="action">An ActonInfo object.</param>
+        /// <returns>A layout id.</returns>
+        public static string GetTargetedLayout(this ActionInfo action)
+        {
+            if (action == null)
+                throw new ArgumentNullException();
+
+            char delimiter = '.';
+
+            if (action.Target != null)
+                return action.Target.Split(delimiter)[1];
+
+            return null;
+        }
+
+        /// <summary>
         /// Retrieve ViewModels from a layout action.
         /// </summary>
         /// <param name="action">An ActionInfo object.</param>
