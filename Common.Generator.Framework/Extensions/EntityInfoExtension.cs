@@ -77,11 +77,33 @@ namespace Common.Generator.Framework.Extensions
         }
 
         /// <summary>
+        /// Retrieve all direct references from an entity.
+        /// </summary>
+        /// <param name="entity">An EntityInfo object.</param>
+        /// <returns>A list of EntityInfo.</returns>
+        public static List<EntityInfo> GetEntityDirectReferences(this EntityInfo entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException();
+
+            List<EntityInfo> directReferences = new List<EntityInfo>();
+
+            if (entity != null
+                && entity.References.AsEnumerable() != null)
+                foreach (ReferenceInfo reference in entity.References.AsEnumerable())
+                    if (reference.Target != null
+                        && !directReferences.AsEnumerable().Contains(reference.Target))
+                        directReferences.Add(reference.Target);
+
+            return directReferences;
+        }
+
+        /// <summary>
         /// Retrieve all indirect references from an entity.
         /// </summary>
         /// <param name="entity">An EntityInfo object.</param>
         /// <returns>A list of EntityInfo.</returns>
-        public static List<EntityInfo> GetAllIndirectReferences(this EntityInfo entity)
+        public static List<EntityInfo> GetEntityIndirectReferences(this EntityInfo entity)
         {
             if (entity == null)
                 throw new ArgumentNullException();

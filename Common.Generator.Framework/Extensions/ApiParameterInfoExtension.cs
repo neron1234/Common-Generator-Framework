@@ -1,5 +1,7 @@
 ﻿using Mobioos.Foundation.Jade.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Generator.Framework.Extensions
 {
@@ -58,6 +60,25 @@ namespace Common.Generator.Framework.Extensions
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Retrieve all direct references from api action parameters.
+        /// </summary>
+        /// <param name="apiParameter">An ApiParameterInfo object.</param>
+        /// <returns>A list of EntityInfo;</returns>
+        public static List<EntityInfo> GetApiParameterDirectReferences(this ApiParameterInfo apiParameter)
+        {
+            if (apiParameter == null)
+                throw new ArgumentNullException();
+
+            List<EntityInfo> directReferences = new List<EntityInfo>();
+
+            if (apiParameter.DataModel != null
+                && apiParameter.DataModel.References.AsEnumerable() != null)
+                directReferences.Union(apiParameter.DataModel.GetEntityDirectReferences());
+
+            return directReferences;
         }
     }
 }

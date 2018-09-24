@@ -29,5 +29,23 @@ namespace Common.Generator.Framework.Extensions
                         menu.Add(concern.Id.ToCamelCase() + "-" + layout.Id.ToCamelCase(),layout.Title);
             return menu;
         }
+
+        /// <summary>
+        /// Retrieve all direct references from a concern.
+        /// </summary>
+        /// <param name="concern">A ConcernInfo object.</param>
+        /// <returns>A list of EntityInfo.</returns>
+        public static List<EntityInfo> GetConcernDirectReferences(this ConcernInfo concern)
+        {
+            if (concern == null)
+                throw new ArgumentNullException();
+
+            List<EntityInfo> directReferences = new List<EntityInfo>();
+
+            if (concern.Layouts.AsEnumerable() != null)
+                directReferences.Union(concern.Layouts.GetLayoutListDirectReferences());
+
+            return directReferences;
+        }
     }
 }

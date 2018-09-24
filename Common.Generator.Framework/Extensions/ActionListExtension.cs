@@ -46,5 +46,28 @@ namespace Common.Generator.Framework.Extensions
 
             return viewModels;
         }
+
+        /// <summary>
+        /// Retrieve services id from actions.
+        /// </summary>
+        /// <param name="layoutActions">An ActionList object.</param>
+        /// <param name="apis">An ApiList object.</param>
+        /// <returns>A list of services id.</returns>
+        public static List<string> GetActionListServices(this ActionList layoutActions, ApiList apis)
+        {
+            if (layoutActions.AsEnumerable() == null)
+                throw new ArgumentNullException();
+
+            List<string> services = new List<string>();
+
+            foreach (ActionInfo action in layoutActions)
+            {
+                string service = action.GetActionService(apis);
+                if (!services.Contains(service))
+                    services.Add(service);
+            }
+
+            return services;
+        }
     }
 }

@@ -66,6 +66,26 @@ namespace Common.Generator.Framework.Extensions
         }
 
         /// <summary>
+        /// Retrieve service id from a layout action.
+        /// </summary>
+        /// <param name="action">An ActionInfo object.</param>
+        /// <param name="apis">An ApiList object.</param>
+        /// <returns>A service id.</returns>
+        public static string GetActionService(this ActionInfo action, ApiList apis)
+        {
+            if (action == null || apis == null)
+                throw new ArgumentNullException();
+
+            string apiService = action.GetService();
+            string result = null;
+
+            if (apiService != null)
+                result = apis.GetApiListService(apiService);
+
+            return result;
+        }
+
+        /// <summary>
         /// Retrieve ViewModels from a layout action.
         /// </summary>
         /// <param name="action">An ActionInfo object.</param>

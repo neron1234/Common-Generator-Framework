@@ -77,47 +77,17 @@ namespace Common.Generator.Framework.Extensions
 
             // Search for references in layout's datamodels
             if (smartApp.Concerns.AsEnumerable() != null)
-                foreach (ConcernInfo concern in smartApp.Concerns.AsEnumerable())
-                    if (concern.Layouts.AsEnumerable() != null)
-                        foreach (LayoutInfo layout in concern.Layouts.AsEnumerable())
-                            if (layout.DataModel != null
-                                && layout.DataModel.References.AsEnumerable() != null)
-                                foreach (ReferenceInfo reference in layout.DataModel.References.AsEnumerable())
-                                    if (reference.Target != null
-                                        && !specifiedModels.AsEnumerable().Contains(reference.Target))
-                                        specifiedModels.Add(reference.Target);
+                specifiedModels.Union(smartApp.Concerns.GetConcernListDirectReferences());
 
             // Search for references in api's datamodels
             if (smartApp.Api.AsEnumerable() != null)
-                foreach (ApiInfo api in smartApp.Api.AsEnumerable())
-                    if (api.Actions.AsEnumerable() != null)
-                        foreach (ApiActionInfo apiAction in api.Actions.AsEnumerable())
-                        {
-                            if (apiAction.Parameters.AsEnumerable() != null)
-                                foreach (ApiParameterInfo apiActionParameter in
-                                         apiAction.Parameters.AsEnumerable())
-                                    if (apiActionParameter.DataModel != null
-                                        && apiActionParameter.DataModel.References.AsEnumerable() != null)
-                                        foreach (ReferenceInfo reference in
-                                                 apiActionParameter.DataModel.References.AsEnumerable())
-                                            if (reference.Target != null
-                                                && !specifiedModels.AsEnumerable().Contains(reference.Target))
-                                                specifiedModels.Add(reference.Target);
-
-                            if (apiAction.ReturnType != null
-                                && apiAction.ReturnType.References.AsEnumerable() != null)
-                                foreach (ReferenceInfo reference in
-                                         apiAction.ReturnType.References.AsEnumerable())
-                                    if (reference.Target != null
-                                        && !specifiedModels.AsEnumerable().Contains(reference.Target))
-                                        specifiedModels.Add(reference.Target);
-                        }
+                specifiedModels.Union(smartApp.Api.GetApiListDirectReferences());
 
             // Get indirect references.
             foreach (EntityInfo entity in specifiedModels.AsEnumerable())
                 if (entity.Id != null)
                 {
-                    usedModels.Union(entity.GetAllIndirectReferences());
+                    usedModels.Union(entity.GetEntityIndirectReferences());
                 }
 
             usedModels.Union(specifiedModels.AsEnumerable());
@@ -141,6 +111,25 @@ namespace Common.Generator.Framework.Extensions
                 usedViewModels.Union(smartApp.Api.GetApiListViewModelsEntities());
 
             return usedViewModels;
+        }
+
+        /// <summary>
+        /// Retrieve layouts from the application.
+        /// </summary>
+        /// <param name="smartApp">A SmartAppInfo object.</param>
+        /// <returns>A LayoutList.</returns>
+        public static LayoutList GetLayouts(this SmartAppInfo smartApp)
+        {
+            if (smartApp == null)
+                throw new ArgumentNullException();
+
+            LayoutList layouts = new LayoutList();
+
+            if (smartApp.Version != null
+                && smartApp.Concerns != null)
+                layouts.Union(smartApp.Concerns.GetLayouts());
+
+            return layouts;
         }
     }
 }

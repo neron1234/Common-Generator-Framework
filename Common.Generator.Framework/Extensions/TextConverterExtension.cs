@@ -145,6 +145,37 @@ namespace Common.Generator.Framework.Extensions
         }
 
         /// <summary>
+        /// Transform Mobioos action types to TypeScript action types.
+        /// </summary>
+        /// <param name="actionType">An action type in string.</param>
+        /// <returns>A TypeScript action type.</returns>
+        public static string TypeScriptActionType(this string actionType)
+        {
+            string result = "";
+
+            switch (actionType.ToLower())
+            {
+                case "dataget":
+                    result = "get";
+                    break;
+                case "datalist":
+                    result = "get";
+                    break;
+                case "datacreate":
+                    result = "post";
+                    break;
+                case "dataupdate":
+                    result = "put";
+                    break;
+                case "datadelete":
+                    result = "delete";
+                    break;
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Check if the given type is a primitive type.
         /// </summary>
         /// <param name="property">A string.</param>
