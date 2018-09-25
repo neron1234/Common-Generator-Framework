@@ -76,7 +76,9 @@ namespace Common.Generator.Framework.Extensions
 
             if (apiParameter.DataModel != null
                 && apiParameter.DataModel.References.AsEnumerable() != null)
-                directReferences.Union(apiParameter.DataModel.GetEntityDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(apiParameter.DataModel.GetEntityDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }

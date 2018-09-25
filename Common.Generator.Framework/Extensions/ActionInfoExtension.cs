@@ -89,14 +89,16 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetActionViewModelsId(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis == null)
+            if (action == null || apis.AsEnumerable() == null)
                 throw new ArgumentNullException();
 
             List<string> viewModels = new List<string>();
             string apiAction = action.GetAction();
 
             if (apiAction != null)
-                viewModels.Union(apis.GetApiListViewModelsId(apiAction));
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apis.GetApiListViewModelsId(apiAction).AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -109,7 +111,7 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service id.</returns>
         public static string GetActionService(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis == null)
+            if (action == null || apis.AsEnumerable() == null)
                 throw new ArgumentNullException();
 
             string apiService = action.GetService();
@@ -128,14 +130,16 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetActionViewModelsEntities(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis == null)
+            if (action == null || apis.AsEnumerable() == null)
                 throw new ArgumentNullException();
 
             List<EntityInfo> viewModels = new List<EntityInfo>();
             string apiAction = action.GetAction();
 
             if (apiAction != null)
-                viewModels.Union(apis.GetApiListViewModelsEntities(apiAction));
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apis.GetApiListViewModelsEntities(apiAction).AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }

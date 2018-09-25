@@ -1,5 +1,4 @@
-﻿using Common.Generator.Framework.Comparer;
-using Common.Generator.Framework.Extensions;
+﻿using Common.Generator.Framework.Extensions;
 using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,18 +16,20 @@ namespace Common.Generator.Framework.Tests
         public void GetLayouts()
         {
             var layouts = _smartApp.GetLayouts();
+            Assert.NotNull(layouts);
         }
 
         [Fact]
         public void GetModels()
         {
             var models = _smartApp.GetModels();
+            Assert.NotNull(models);
         }
 
         [Fact]
-        public void CompareEntityInfoList()
+        public void UnionEntityInfoList()
         {
-            EntityInfo entity = new EntityInfo()
+            EntityInfo entity1 = new EntityInfo()
             {
                 Id = "vlarf"
             };
@@ -38,23 +39,28 @@ namespace Common.Generator.Framework.Tests
                 Id = "test"
             };
 
-            List<EntityInfo> list = new List<EntityInfo>();
-            list.Add(entity);
-            list.Add(entity2);
+            EntityInfo entity3 = new EntityInfo()
+            {
+                Id = "today"
+            };
+
+            List<EntityInfo> list1 = new List<EntityInfo>();
+            list1.Add(entity1);
+            list1.Add(entity2);
 
             List<EntityInfo> list2 = new List<EntityInfo>();
-            list2.Add(entity);
-            list2.Add(entity2);
+            list2.Add(entity1);
+            list2.Add(entity3);
 
-            var union = list.Union(list2);
+            var union = list1.AsEnumerable().Union(list2.AsEnumerable());
 
-            Assert.Null(union);
+            Assert.NotNull(union);
         }
 
         [Fact]
-        public void CompareLayoutList()
+        public void UnionLayoutList()
         {
-            LayoutInfo layout = new LayoutInfo()
+            LayoutInfo layout1 = new LayoutInfo()
             {
                 Id = "vlarf"
             };
@@ -64,20 +70,20 @@ namespace Common.Generator.Framework.Tests
                 Id = "test"
             };
 
-            LayoutList list = new LayoutList();
-            list.Add(layout);
-            list.Add(layout2);
+            LayoutInfo layout3 = new LayoutInfo()
+            {
+                Id = "today"
+            };
+
+            LayoutList list1 = new LayoutList();
+            list1.Add(layout1);
+            list1.Add(layout2);
 
             LayoutList list2 = new LayoutList();
-            list2.Add(layout);
-            list2.Add(layout2);
+            list2.Add(layout1);
+            list2.Add(layout3);
 
-            var union = list.Union(list2);
-
-            foreach (LayoutInfo la in union.AsEnumerable())
-            {
-                var l = la;
-            }
+            var union = list1.AsEnumerable().Union(list2.AsEnumerable());
 
             Assert.NotNull(union);
         }

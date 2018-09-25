@@ -37,7 +37,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
             foreach (ConcernInfo concern in concerns.AsEnumerable())
-                directReferences.Union(concern.GetConcernDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(concern.GetConcernDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }
@@ -55,7 +57,9 @@ namespace Common.Generator.Framework.Extensions
             LayoutList layouts = new LayoutList();
 
             foreach (ConcernInfo concern in concerns)
-                layouts.Union(concern.Layouts);
+                layouts = layouts.AsEnumerable()
+                                 .Union(concern.Layouts.AsEnumerable())
+                                 .ToLayoutList();
 
             return layouts;
         }

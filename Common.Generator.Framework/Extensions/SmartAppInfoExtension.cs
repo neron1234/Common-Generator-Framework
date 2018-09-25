@@ -81,20 +81,28 @@ namespace Common.Generator.Framework.Extensions
             {
                 // Search for references in layout's datamodels
                 if (smartApp.Concerns.AsEnumerable() != null)
-                    specifiedModels.Union(smartApp.Concerns.GetConcernListDirectReferences());
+                    specifiedModels = specifiedModels.AsEnumerable()
+                                                     .Union(smartApp.Concerns.GetConcernListDirectReferences().AsEnumerable())
+                                                     .ToList();
 
                 // Search for references in api's datamodels
                 if (smartApp.Api.AsEnumerable() != null)
-                    specifiedModels.Union(smartApp.Api.GetApiListDirectReferences());
+                    specifiedModels = specifiedModels.AsEnumerable()
+                                                     .Union(smartApp.Api.GetApiListDirectReferences().AsEnumerable())
+                                                     .ToList();
 
                 // Get indirect references.
                 foreach (EntityInfo entity in specifiedModels.AsEnumerable())
                     if (entity.Id != null)
                     {
-                        usedModels.Union(entity.GetEntityIndirectReferences());
+                        usedModels = usedModels.AsEnumerable()
+                                               .Union(entity.GetEntityIndirectReferences().AsEnumerable())
+                                               .ToList();
                     }
 
-                usedModels.Union(specifiedModels.AsEnumerable());
+                usedModels = usedModels.AsEnumerable()
+                                       .Union(specifiedModels.AsEnumerable())
+                                       .ToList();
             }
 
             return usedModels;
@@ -113,7 +121,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> usedViewModels = new List<EntityInfo>();
             if (smartApp.Version != null
                 && smartApp.Api.AsEnumerable() != null)
-                usedViewModels.Union(smartApp.Api.GetApiListViewModelsEntities());
+                usedViewModels = usedViewModels.AsEnumerable()
+                                               .Union(smartApp.Api.GetApiListViewModelsEntities().AsEnumerable())
+                                               .ToList();
 
             return usedViewModels;
         }
@@ -132,7 +142,9 @@ namespace Common.Generator.Framework.Extensions
 
             if (smartApp.Version != null
                 && smartApp.Concerns != null)
-                layouts.Union(smartApp.Concerns.GetLayouts());
+                layouts = layouts.AsEnumerable()
+                                 .Union(smartApp.Concerns.GetLayouts().AsEnumerable())
+                                 .ToLayoutList();
 
             return layouts;
         }

@@ -45,11 +45,15 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
             if (apiAction.Parameters.AsEnumerable() != null)
-                directReferences.Union(apiAction.Parameters.GetApiParametersDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(apiAction.Parameters.GetApiParametersDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             if (apiAction.ReturnType != null
                 && apiAction.ReturnType.References.AsEnumerable() != null)
-                directReferences.Union(apiAction.ReturnType.GetEntityDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(apiAction.ReturnType.GetEntityDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }
@@ -66,9 +70,10 @@ namespace Common.Generator.Framework.Extensions
 
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
-            foreach (ApiParameterInfo apiActionParameter in
-                        apiParameters.AsEnumerable())
-                directReferences.Union(apiActionParameter.GetApiParameterDirectReferences());
+            foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(apiActionParameter.GetApiParameterDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }
@@ -92,7 +97,9 @@ namespace Common.Generator.Framework.Extensions
                     && !viewModels.AsEnumerable().Contains(apiAction.ReturnType.Id.ToPascalCase()))
                     viewModels.Add(apiAction.ReturnType.Id.ToPascalCase());
 
-                viewModels.Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsId());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsId().AsEnumerable())
+                                       .ToList();
             }
 
             return viewModels;
@@ -138,7 +145,9 @@ namespace Common.Generator.Framework.Extensions
                     && !viewModels.AsEnumerable().Contains(apiAction.ReturnType))
                     viewModels.Add(apiAction.ReturnType);
 
-                viewModels.Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable())
+                                       .ToList();
             }
 
             return viewModels;
@@ -187,7 +196,9 @@ namespace Common.Generator.Framework.Extensions
                     && !viewModels.AsEnumerable().Contains(apiAction.ReturnType.Id.ToPascalCase()))
                     viewModels.Add(apiAction.ReturnType.Id.ToPascalCase());
 
-                viewModels.Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsId());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsId().AsEnumerable())
+                                       .ToList();
             }
 
             return viewModels;
@@ -207,14 +218,16 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
             if (apiAction.Id.ToLower().Equals(layoutAction.ToLower())
-                                && apiAction.Parameters.AsEnumerable() != null)
+                && apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
                     && !viewModels.AsEnumerable().Contains(apiAction.ReturnType))
                     viewModels.Add(apiAction.ReturnType);
 
-                viewModels.Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable())
+                                       .ToList();
             }
 
             return viewModels;

@@ -43,7 +43,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
             if (concern.Layouts.AsEnumerable() != null)
-                directReferences.Union(concern.Layouts.GetLayoutListDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(concern.Layouts.GetLayoutListDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }

@@ -110,8 +110,10 @@ namespace Common.Generator.Framework.Extensions
 
             List<EntityInfo> allIndirectReferences = new List<EntityInfo>();
 
-            foreach (PropertyInfo property in entity.GetLinkedProperties())
-                allIndirectReferences.Union(property.GetIndirectReferences());
+            foreach (PropertyInfo property in entity.GetLinkedProperties().AsEnumerable())
+                allIndirectReferences = allIndirectReferences.AsEnumerable()
+                                                             .Union(property.GetIndirectReferences().AsEnumerable())
+                                                             .ToList();
 
             return allIndirectReferences;
         }

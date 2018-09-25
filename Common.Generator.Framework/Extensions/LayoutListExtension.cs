@@ -20,9 +20,24 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
             foreach (LayoutInfo layout in layouts)
-                directReferences.Union(layout.GetLayoutDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(layout.GetLayoutDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
+        }
+
+        /// <summary>
+        /// Convert an IEnumerable to a LayoutList
+        /// </summary>
+        /// <param name="layouts">A list of LayoutInfo objects.</param>
+        /// <returns>A LayoutList</returns>
+        public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts)
+        {
+            LayoutList l = new LayoutList();
+            foreach (LayoutInfo layout in layouts)
+                l.Add(layout);
+            return l;
         }
     }
 }

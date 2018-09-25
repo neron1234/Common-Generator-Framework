@@ -15,14 +15,16 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetActionsViewModelsId(this ActionList layoutActions, ApiList apis)
         {
-            if (layoutActions == null || apis == null)
+            if (layoutActions.AsEnumerable() == null || apis == null)
                 throw new ArgumentNullException();
 
             List<string> viewModels = new List<string>();
 
             if (layoutActions.AsEnumerable() != null)
                 foreach (ActionInfo action in layoutActions.AsEnumerable())
-                    viewModels.Union(action.GetActionViewModelsId(apis));
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(action.GetActionViewModelsId(apis).AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -35,14 +37,16 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetActionsViewModelsEntities(this ActionList layoutActions, ApiList apis)
         {
-            if (layoutActions == null || apis == null)
+            if (layoutActions.AsEnumerable() == null || apis == null)
                 throw new ArgumentNullException();
 
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
             if (layoutActions.AsEnumerable() != null)
                 foreach (ActionInfo action in layoutActions.AsEnumerable())
-                    viewModels.Union(action.GetActionViewModelsEntities(apis));
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(action.GetActionViewModelsEntities(apis).AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -60,7 +64,7 @@ namespace Common.Generator.Framework.Extensions
 
             List<string> services = new List<string>();
 
-            foreach (ActionInfo action in layoutActions)
+            foreach (ActionInfo action in layoutActions.AsEnumerable())
             {
                 string service = action.GetActionService(apis);
                 if (!services.Contains(service))

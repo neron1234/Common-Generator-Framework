@@ -20,7 +20,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
             foreach (ApiActionInfo apiAction in apiActions)
-                directReferences.Union(apiAction.GetApiActionDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(apiAction.GetApiActionDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }
@@ -38,7 +40,9 @@ namespace Common.Generator.Framework.Extensions
             List<string> viewModels = new List<string>();
 
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels.Union(apiAction.GetApiActionViewModelsId());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.GetApiActionViewModelsId().AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -56,7 +60,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels.Union(apiAction.GetApiActionViewModelsEntities());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -76,7 +82,9 @@ namespace Common.Generator.Framework.Extensions
             List<string> viewModels = new List<string>();
 
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels.Union(apiAction.GetApiActionViewModelsId(layoutAction));
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.GetApiActionViewModelsId(layoutAction).AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -97,7 +105,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels.Union(apiAction.GetApiActionViewModelsEntities());
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }

@@ -21,7 +21,9 @@ namespace Common.Generator.Framework.Extensions
             List<string> viewModels = new List<string>();
 
             if (layout.Actions.AsEnumerable() != null)
-                viewModels.Union(layout.Actions.GetActionsViewModelsId(apis));
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(layout.Actions.GetActionsViewModelsId(apis).AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -40,7 +42,9 @@ namespace Common.Generator.Framework.Extensions
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
             if (layout.Actions.AsEnumerable() != null)
-                viewModels.Union(layout.Actions.GetActionsViewModelsEntities(apis));
+                viewModels = viewModels.AsEnumerable()
+                                       .Union(layout.Actions.GetActionsViewModelsEntities(apis).AsEnumerable())
+                                       .ToList();
 
             return viewModels;
         }
@@ -59,7 +63,9 @@ namespace Common.Generator.Framework.Extensions
             List<string> services = new List<string>();
 
             if (layout.Actions.AsEnumerable() != null)
-                services.Union(layout.Actions.GetActionListServices(apis));
+                services = services.AsEnumerable()
+                                   .Union(layout.Actions.GetActionListServices(apis).AsEnumerable())
+                                   .ToList();
 
             return services;
         }
@@ -78,7 +84,9 @@ namespace Common.Generator.Framework.Extensions
 
             if (layout.DataModel != null
                     && layout.DataModel.References.AsEnumerable() != null)
-                directReferences.Union(layout.DataModel.GetEntityDirectReferences());
+                directReferences = directReferences.AsEnumerable()
+                                                   .Union(layout.DataModel.GetEntityDirectReferences().AsEnumerable())
+                                                   .ToList();
 
             return directReferences;
         }
