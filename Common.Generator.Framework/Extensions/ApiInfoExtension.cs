@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiDirectReferences(this ApiInfo api)
         {
-            if (api == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals(""))
+                return directReferences;
 
             if (api.Actions.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
@@ -34,10 +37,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiViewModelsId(this ApiInfo api)
         {
-            if (api == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals(""))
+                return viewModels;
 
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
@@ -55,10 +60,13 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiViewModelsId(this ApiInfo api, string layoutAction)
         {
-            if (api == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals("")
+                || layoutAction == null)
+                return viewModels;
 
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
@@ -75,14 +83,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiViewModelsEntities(this ApiInfo api)
         {
-            if (api == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals(""))
+                return viewModels;
+
+            EntityInfoComparer comparer = new EntityInfoComparer();
 
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsEntities().AsEnumerable())
+                                       .Union(api.Actions.GetApiActionListViewModelsEntities().AsEnumerable(), comparer)
                                        .ToList();
 
             return viewModels;
@@ -95,10 +107,13 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiViewModelsEntities(this ApiInfo api, string layoutAction)
         {
-            if (api == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals("")
+                || layoutAction == null)
+                return viewModels;
 
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
@@ -116,13 +131,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service id.</returns>
         public static string GetApiService(this ApiInfo api, string apiService)
         {
-            if (api == null || apiService == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (api == null
+                || api.Id == null
+                || api.Id.Equals("")
+                || apiService == null)
+                return result;
 
             if (api.Id.ToLower().Equals(apiService.ToLower()))
                 return apiService.ToPascalCase();
 
-            return null;
+            return result;
         }
     }
 }

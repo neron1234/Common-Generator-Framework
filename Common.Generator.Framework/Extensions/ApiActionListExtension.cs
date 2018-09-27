@@ -1,5 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
-using System;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,15 +14,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionListDirectReferences(this ApiActionList apiActions)
         {
-            if (apiActions.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (apiActions.AsEnumerable() == null)
+                return directReferences;
+
             foreach (ApiActionInfo apiAction in apiActions)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(apiAction.GetApiActionDirectReferences().AsEnumerable())
-                                                   .ToList();
+                if (apiAction.Id != null
+                    && !apiAction.Id.Equals(""))
+                    directReferences = directReferences.AsEnumerable()
+                                                       .Union(apiAction.GetApiActionDirectReferences().AsEnumerable())
+                                                       .ToList();
 
             return directReferences;
         }
@@ -34,15 +36,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiActionListViewModelsId(this ApiActionList apiActions)
         {
-            if (apiActions.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
 
+            if (apiActions.AsEnumerable() == null)
+                return viewModels;
+
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.GetApiActionViewModelsId().AsEnumerable())
-                                       .ToList();
+                if (apiAction.Id != null
+                    && !apiAction.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(apiAction.GetApiActionViewModelsId().AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -54,15 +58,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionListViewModelsEntities(this ApiActionList apiActions)
         {
-            if (apiActions.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
+            if (apiActions.AsEnumerable() == null)
+                return viewModels;
+
+            EntityInfoComparer comparer = new EntityInfoComparer();
+
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable())
-                                       .ToList();
+                if (apiAction.Id != null
+                    && !apiAction.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable(), comparer)
+                                           .ToList();
 
             return viewModels;
         }
@@ -76,15 +84,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiActionListViewModelsId(this ApiActionList apiActions, string layoutAction)
         {
-            if (apiActions.AsEnumerable() == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
 
+            if (apiActions.AsEnumerable() == null
+                || layoutAction == null)
+                return viewModels;
+
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.GetApiActionViewModelsId(layoutAction).AsEnumerable())
-                                       .ToList();
+                if (apiAction.Id != null
+                    && !apiAction.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(apiAction.GetApiActionViewModelsId(layoutAction).AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -99,15 +110,18 @@ namespace Common.Generator.Framework.Extensions
         public static List<EntityInfo> GetApiActionListViewModelsEntities(
             this ApiActionList apiActions, string layoutAction)
         {
-            if (apiActions.AsEnumerable() == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
+            if (apiActions.AsEnumerable() == null
+                || layoutAction == null)
+                return viewModels;
+
             foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable())
-                                       .ToList();
+                if (apiAction.Id != null
+                    && !apiAction.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }

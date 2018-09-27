@@ -15,16 +15,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetActionsViewModelsId(this ActionList layoutActions, ApiList apis)
         {
-            if (layoutActions.AsEnumerable() == null || apis == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (layoutActions.AsEnumerable() == null
+                || apis == null)
+                return viewModels;
 
             if (layoutActions.AsEnumerable() != null)
                 foreach (ActionInfo action in layoutActions.AsEnumerable())
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(action.GetActionViewModelsId(apis).AsEnumerable())
-                                           .ToList();
+                    if (action.Id != null
+                        && !action.Id.Equals(""))
+                        viewModels = viewModels.AsEnumerable()
+                                               .Union(action.GetActionViewModelsId(apis).AsEnumerable())
+                                               .ToList();
 
             return viewModels;
         }
@@ -37,16 +40,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetActionsViewModelsEntities(this ActionList layoutActions, ApiList apis)
         {
-            if (layoutActions.AsEnumerable() == null || apis == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (layoutActions.AsEnumerable() == null
+                || apis == null)
+                return viewModels;
 
             if (layoutActions.AsEnumerable() != null)
                 foreach (ActionInfo action in layoutActions.AsEnumerable())
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(action.GetActionViewModelsEntities(apis).AsEnumerable())
-                                           .ToList();
+                    if (action.Id != null
+                        && !action.Id.Equals(""))
+                        viewModels = viewModels.AsEnumerable()
+                                               .Union(action.GetActionViewModelsEntities(apis).AsEnumerable())
+                                               .ToList();
 
             return viewModels;
         }
@@ -59,17 +65,22 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of services id.</returns>
         public static List<string> GetActionListServices(this ActionList layoutActions, ApiList apis)
         {
-            if (layoutActions.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<string> services = new List<string>();
 
+            if (layoutActions.AsEnumerable() == null
+                || apis == null)
+                return services;
+
             foreach (ActionInfo action in layoutActions.AsEnumerable())
-            {
-                string service = action.GetActionService(apis);
-                if (!services.Contains(service))
-                    services.Add(service);
-            }
+                if (action.Id != null
+                    && !action.Id.Equals(""))
+                {
+                    string service = action.GetActionService(apis);
+                    if (service != null
+                        && !service.Equals("")
+                        && !services.Any(item => item == service))
+                        services.Add(service);
+                }
 
             return services;
         }

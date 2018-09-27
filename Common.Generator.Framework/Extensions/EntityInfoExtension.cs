@@ -17,22 +17,31 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of PropertyInfo.</returns>
         public static List<PropertyInfo> GetLinkedProperties(this EntityInfo entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException();
-
             List<PropertyInfo> result = new List<PropertyInfo>();
+
+            if (entity == null
+                || entity.Id == null
+                || entity.Id.Equals(""))
+                return result;
 
             if (entity.BaseEntity != null)
                 foreach (PropertyInfo property in entity.BaseEntity.GetLinkedProperties().AsEnumerable())
-                    result.Add(property);
+                    if (property.Id != null
+                        && !property.Id.Equals(""))
+                        result.Add(property);
 
             if (entity.Properties.AsEnumerable() != null)
                 foreach (PropertyInfo property in entity.Properties.AsEnumerable())
-                    result.Add(property);
+                    if (property.Id != null
+                        && !property.Id.Equals(""))
+                        result.Add(property);
 
             if (entity.References.AsEnumerable() != null)
                 foreach (ReferenceInfo reference in entity.References.AsEnumerable())
-                    if (reference.Target != null
+                    if (reference.Id != null
+                        && !reference.Id.Equals("")
+                        && reference.Target != null
+                        && !reference.Target.Id.Equals("")
                         && !reference.Target.IsAbstract
                         && !reference.IsCollection)
                     {
@@ -40,9 +49,12 @@ namespace Common.Generator.Framework.Extensions
                             result.Add(reference);
                         else
                             foreach (PropertyInfo property in reference.Target.GetLinkedProperties().AsEnumerable())
-                                result.Add(property);
+                                if (property.Id != null
+                                    && !property.Id.Equals(""))
+                                    result.Add(property);
                     }
-                    else
+                    else if (reference.Id != null
+                             && !reference.Id.Equals(""))
                         result.Add(reference);
             return result;
         }
@@ -56,22 +68,30 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of PropertyInfo.</returns>
         public static List<PropertyInfo> GetProperties(this EntityInfo entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException();
-
             List<PropertyInfo> result = new List<PropertyInfo>();
+
+            if (entity == null
+                || entity.Id == null
+                || entity.Id.Equals(""))
+                return result;
 
             if (entity.BaseEntity != null)
                 foreach (PropertyInfo property in entity.BaseEntity.GetProperties().AsEnumerable())
-                    result.Add(property);
+                    if (property.Id != null
+                        && !property.Id.Equals(""))
+                        result.Add(property);
 
             if (entity.Properties.AsEnumerable() != null)
                 foreach (PropertyInfo property in entity.Properties.AsEnumerable())
-                    result.Add(property);
+                    if (property.Id != null
+                        && !property.Id.Equals(""))
+                        result.Add(property);
 
             if (entity.References.AsEnumerable() != null)
                 foreach (ReferenceInfo reference in entity.References.AsEnumerable())
-                    result.Add(reference);
+                    if (reference.Id != null
+                        && !reference.Id.Equals(""))
+                        result.Add(reference);
 
             return result;
         }
@@ -83,16 +103,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetEntityDirectReferences(this EntityInfo entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
-            if (entity != null
-                && entity.References.AsEnumerable() != null)
+            if (entity == null
+                || entity.Id == null
+                || entity.Id.Equals(""))
+                return directReferences;
+
+            if (entity.References.AsEnumerable() != null)
                 foreach (ReferenceInfo reference in entity.References.AsEnumerable())
                     if (reference.Target != null
-                        && !directReferences.AsEnumerable().Contains(reference.Target))
+                        && reference.Target.Id != null
+                        && !reference.Target.Id.Equals("")
+                        && !directReferences.AsEnumerable()
+                                            .Any(item => item == reference.Target))
                         directReferences.Add(reference.Target);
 
             return directReferences;
@@ -105,15 +129,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetEntityIndirectReferences(this EntityInfo entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> allIndirectReferences = new List<EntityInfo>();
 
+            if (entity == null
+                || entity.Id == null
+                || entity.Id.Equals(""))
+                return allIndirectReferences;
+
             foreach (PropertyInfo property in entity.GetLinkedProperties().AsEnumerable())
-                allIndirectReferences = allIndirectReferences.AsEnumerable()
-                                                             .Union(property.GetIndirectReferences().AsEnumerable())
-                                                             .ToList();
+                if (property.Id != null
+                    && !property.Id.Equals(""))
+                    allIndirectReferences = allIndirectReferences.AsEnumerable()
+                                                                 .Union(property.GetIndirectReferences().AsEnumerable())
+                                                                 .ToList();
 
             return allIndirectReferences;
         }

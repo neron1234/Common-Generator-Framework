@@ -14,15 +14,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetLayoutListDirectReferences(this LayoutList layouts)
         {
-            if (layouts.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (layouts.AsEnumerable() == null)
+                return directReferences;
+
             foreach (LayoutInfo layout in layouts)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(layout.GetLayoutDirectReferences().AsEnumerable())
-                                                   .ToList();
+                if (layout.Id != null
+                    && !layout.Id.Equals(""))
+                    directReferences = directReferences.AsEnumerable()
+                                                       .Union(layout.GetLayoutDirectReferences().AsEnumerable())
+                                                       .ToList();
 
             return directReferences;
         }
@@ -32,12 +34,21 @@ namespace Common.Generator.Framework.Extensions
         /// </summary>
         /// <param name="layouts">A list of LayoutInfo objects.</param>
         /// <returns>A LayoutList</returns>
-        public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts)
+        public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts, ConcernInfo parent)
         {
-            LayoutList l = new LayoutList();
-            foreach (LayoutInfo layout in layouts)
-                l.Add(layout);
-            return l;
+            LayoutList result = new LayoutList();
+
+            if (parent != null
+                && !parent.Id.Equals(""))
+            {
+                result.Parent = parent;
+                foreach (LayoutInfo layout in layouts)
+                    if (layout.Id != null
+                        && !layout.Id.Equals(""))
+                        result.Add(layout);
+            }
+
+            return result;
         }
     }
 }

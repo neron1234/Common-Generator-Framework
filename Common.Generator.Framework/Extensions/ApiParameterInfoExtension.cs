@@ -14,8 +14,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A C# type in string.</returns>
         public static string CSharpType(this ApiParameterInfo apiParameter)
         {
-            if (apiParameter == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (apiParameter == null
+                || apiParameter.Id == null
+                || apiParameter.Id.Equals(""))
+                return result;
 
             return apiParameter.Type.CSharpType();
         }
@@ -27,8 +31,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A TypeScript type in string.</returns>
         public static string TypeScriptType(this ApiParameterInfo apiParameter)
         {
-            if (apiParameter == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (apiParameter == null
+                || apiParameter.Id == null
+                || apiParameter.Id.Equals(""))
+                return result;
 
             return apiParameter.Type.TypeScriptType();
         }
@@ -40,8 +48,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsPrimitiveType(this ApiParameterInfo apiParameter)
         {
-            if (apiParameter == null)
-                throw new ArgumentNullException();
+            bool result = false;
+
+            if (apiParameter == null
+                || apiParameter.Id == null
+                || apiParameter.Id.Equals(""))
+                return result;
 
             return apiParameter.Type.IsPrimitiveType();
         }
@@ -53,13 +65,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsModel(this ApiParameterInfo apiParameter)
         {
-            if (apiParameter == null)
-                throw new ArgumentNullException();
+            bool result = false;
 
-            if (!apiParameter.IsPrimitiveType() && apiParameter.DataModel != null)
+            if (apiParameter == null
+                || apiParameter.Id == null
+                || apiParameter.Id.Equals(""))
+                return result;
+
+            if (!apiParameter.IsPrimitiveType()
+                && apiParameter.DataModel != null
+                && apiParameter.DataModel.Id != null
+                && !apiParameter.DataModel.Id.Equals(""))
                 return true;
 
-            return false;
+            return result;
         }
 
         /// <summary>
@@ -69,12 +88,16 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo;</returns>
         public static List<EntityInfo> GetApiParameterDirectReferences(this ApiParameterInfo apiParameter)
         {
-            if (apiParameter == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (apiParameter == null
+                || apiParameter.Id == null
+                || apiParameter.Id.Equals(""))
+                return directReferences;
+
             if (apiParameter.DataModel != null
+                && apiParameter.DataModel.Id != null
+                && !apiParameter.DataModel.Id.Equals("")
                 && apiParameter.DataModel.References.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
                                                    .Union(apiParameter.DataModel.GetEntityDirectReferences().AsEnumerable())

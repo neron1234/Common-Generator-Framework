@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiListDirectReferences(this ApiList apis)
         {
-            if (apis.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (apis.AsEnumerable() == null)
+                return directReferences;
+
             foreach (ApiInfo api in apis)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(api.GetApiDirectReferences().AsEnumerable())
-                                                   .ToList();
+                if (api.Id != null
+                    && !api.Id.Equals(""))
+                    directReferences = directReferences.AsEnumerable()
+                                                       .Union(api.GetApiDirectReferences().AsEnumerable())
+                                                       .ToList();
 
             return directReferences;
         }
@@ -34,15 +37,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiListViewModelsId(this ApiList apis)
         {
-            if (apis == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
 
+            if (apis == null)
+                return viewModels;
+
             foreach (ApiInfo api in apis.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.GetApiViewModelsId().AsEnumerable())
-                                       .ToList();
+                if (api.Id != null
+                    && !api.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(api.GetApiViewModelsId().AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -55,15 +60,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiListViewModelsId(this ApiList apis, string layoutAction)
         {
-            if (apis == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
 
+            if (apis == null
+                || layoutAction == null)
+                return viewModels;
+
             foreach (ApiInfo api in apis.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.GetApiViewModelsId(layoutAction).AsEnumerable())
-                                       .ToList();
+                if (api.Id != null
+                    && !api.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(api.GetApiViewModelsId(layoutAction).AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -75,15 +83,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiListViewModelsEntities(this ApiList apis)
         {
-            if (apis == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
+            if (apis == null)
+                return viewModels;
+
+            EntityInfoComparer comparer = new EntityInfoComparer();
+
             foreach (ApiInfo api in apis.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.GetApiViewModelsEntities().AsEnumerable())
-                                       .ToList();
+                if (api.Id != null
+                    && !api.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(api.GetApiViewModelsEntities().AsEnumerable(), comparer)
+                                           .ToList();
 
             return viewModels;
         }
@@ -96,15 +108,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiListViewModelsEntities(this ApiList apis, string layoutAction)
         {
-            if (apis == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
+            if (apis == null
+                || layoutAction == null)
+                return viewModels;
+
             foreach (ApiInfo api in apis.AsEnumerable())
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.GetApiViewModelsEntities(layoutAction).AsEnumerable())
-                                       .ToList();
+                if (api.Id != null
+                    && !api.Id.Equals(""))
+                    viewModels = viewModels.AsEnumerable()
+                                           .Union(api.GetApiViewModelsEntities(layoutAction).AsEnumerable())
+                                           .ToList();
 
             return viewModels;
         }
@@ -117,16 +132,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service id.</returns>
         public static string GetApiListService(this ApiList apis, string apiService)
         {
-            if (apis.AsEnumerable() == null || apiService == null)
-                throw new ArgumentNullException();
+            string result = "";
 
-            string result = null;
+            if (apis.AsEnumerable() == null
+                || apiService == null)
+                return result;
 
             foreach (ApiInfo api in apis)
             {
-                if (result != null)
+                if (!result.Equals(""))
                     return result;
-                else
+                else if (api.Id != null
+                         && !api.Id.Equals(""))
                     result = api.GetApiService(apiService);
             }
 

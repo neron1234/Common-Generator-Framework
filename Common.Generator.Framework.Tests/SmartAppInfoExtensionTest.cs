@@ -27,6 +27,13 @@ namespace Common.Generator.Framework.Tests
         }
 
         [Fact]
+        public void GetViewModels()
+        {
+            var viewModels = _smartApp.GetViewModels();
+            Assert.NotNull(viewModels);
+        }
+
+        [Fact]
         public void UnionEntityInfoList()
         {
             EntityInfo entity1 = new EntityInfo()
@@ -86,6 +93,20 @@ namespace Common.Generator.Framework.Tests
             var union = list1.AsEnumerable().Union(list2.AsEnumerable());
 
             Assert.NotNull(union);
+        }
+
+        [Fact]
+        public void ToPascalCase()
+        {
+            string s = "testMille";
+            string result = s.ToPascalCase();
+        }
+
+        [Fact]
+        public void ToCamelCase()
+        {
+            string s = "TestMille";
+            string result = s.ToCamelCase();
         }
     }
 }

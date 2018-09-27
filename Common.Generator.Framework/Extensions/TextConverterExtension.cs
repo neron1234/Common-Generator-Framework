@@ -13,10 +13,11 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A string converted to PascalCase.</returns>
         public static string ToPascalCase(this string word)
         {
-            if (word == null)
-                throw new ArgumentNullException();
-
             string result = "";
+
+            if (word == null)
+                return result;
+
             word = word.Trim();
 
             if (word.Length > 0)
@@ -28,17 +29,18 @@ namespace Common.Generator.Framework.Extensions
                 {
                     string newS = s;
                     newS = Regex.Replace(
-                               newS,
-                               "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                               " $1",
-                               RegexOptions.Compiled
-                           ).Trim();
+                                    newS,
+                                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                                    " $1",
+                                    RegexOptions.Compiled)
+                                .Trim();
 
                     newS = newS.Replace(" ", string.Empty);
                     newS = newS.Substring(0, 1).ToUpper() + newS.Substring(1);
                     result += newS;
                 }
             }
+
             return result;
         }
 
@@ -49,10 +51,11 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A string converted to CamelCase.</returns>
         public static string ToCamelCase(this string word)
         {
-            if (word == null)
-                throw new ArgumentNullException();
-
             string result = "";
+
+            if (word == null)
+                return result;
+
             word = word.Trim();
 
             if (word.Length > 0)
@@ -65,11 +68,11 @@ namespace Common.Generator.Framework.Extensions
                 {
                     string newS = s;
                     newS = Regex.Replace(
-                               newS,
-                               "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                               " $1",
-                               RegexOptions.Compiled
-                           ).Trim();
+                                    newS,
+                                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                                    " $1",
+                                    RegexOptions.Compiled)
+                                .Trim();
 
                     newS = newS.Replace(" ", string.Empty);
 
@@ -82,6 +85,7 @@ namespace Common.Generator.Framework.Extensions
                     result += newS;
                 }
             }
+
             return result;
         }
 
@@ -92,8 +96,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A C# type in string.</returns>
         public static string CSharpType(this string type)
         {
+            string result = "";
+
             if (type == null)
-                throw new ArgumentNullException();
+                return result;
 
             switch (type.ToLower())
             {
@@ -123,8 +129,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A Typescript type in string.</returns>
         public static string TypeScriptType(this string type)
         {
+            string result = "";
+
             if (type == null)
-                throw new ArgumentNullException();
+                return result;
 
             switch (type.ToLower())
             {
@@ -153,26 +161,24 @@ namespace Common.Generator.Framework.Extensions
         {
             string result = "";
 
+            if (actionType == null)
+                return result;
+
             switch (actionType.ToLower())
             {
                 case "dataget":
-                    result = "get";
-                    break;
+                    return "get";
                 case "datalist":
-                    result = "get";
-                    break;
+                    return "get";
                 case "datacreate":
-                    result = "post";
-                    break;
+                    return "post";
                 case "dataupdate":
-                    result = "put";
-                    break;
+                    return "put";
                 case "datadelete":
-                    result = "delete";
-                    break;
+                    return "delete";
+                default:
+                    return actionType;
             }
-
-            return result;
         }
 
         /// <summary>
@@ -182,8 +188,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsPrimitiveType(this string type)
         {
+            bool result = false;
+
             if (type == null)
-                throw new ArgumentNullException();
+                return result;
 
             switch (type.ToLower())
             {
@@ -197,7 +205,7 @@ namespace Common.Generator.Framework.Extensions
                 case "number":
                     return true;
                 default:
-                    return false;
+                    return result;
             }
         }
 
@@ -208,9 +216,11 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsDataAction(this string actionType)
         {
+            bool result = false;
+
             if (actionType == null)
-                throw new ArgumentNullException();
-            
+                return result;
+
             switch (actionType.ToLower())
             {
                 case "dataget":
@@ -220,7 +230,7 @@ namespace Common.Generator.Framework.Extensions
                 case "datadelete":
                     return true;
                 default:
-                    return false;
+                    return result;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,11 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A request type in string.</returns>
         public static string CSharpType(this ApiActionInfo apiAction)
         {
-            if (apiAction == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (apiAction == null
+                || apiAction.Type == null)
+                return result;
 
             switch (apiAction.Type.ToLower())
             {
@@ -39,10 +43,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionDirectReferences(this ApiActionInfo apiAction)
         {
-            if (apiAction == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
+
+            if (apiAction == null
+                || apiAction.Id == null
+                || apiAction.Id.Equals(""))
+                return directReferences;
 
             if (apiAction.Parameters.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
@@ -50,6 +56,8 @@ namespace Common.Generator.Framework.Extensions
                                                    .ToList();
 
             if (apiAction.ReturnType != null
+                && apiAction.ReturnType.Id != null
+                && !apiAction.ReturnType.Id.Equals("")
                 && apiAction.ReturnType.References.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
                                                    .Union(apiAction.ReturnType.GetEntityDirectReferences().AsEnumerable())
@@ -65,15 +73,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiParametersDirectReferences(this IEnumerable<ApiParameterInfo> apiParameters)
         {
-            if (apiParameters.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (apiParameters.AsEnumerable() == null)
+                return directReferences;
+
             foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(apiActionParameter.GetApiParameterDirectReferences().AsEnumerable())
-                                                   .ToList();
+                if (apiActionParameter.Id != null
+                    && !apiActionParameter.Id.Equals(""))
+                    directReferences = directReferences.AsEnumerable()
+                                                       .Union(apiActionParameter.GetApiParameterDirectReferences().AsEnumerable())
+                                                       .ToList();
 
             return directReferences;
         }
@@ -85,16 +95,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiActionViewModelsId(this ApiActionInfo apiAction)
         {
-            if (apiAction == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (apiAction == null
+                || apiAction.Id == null
+                || apiAction.Id.Equals(""))
+                return viewModels;
 
             if (apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
-                    && !viewModels.AsEnumerable().Contains(apiAction.ReturnType.Id.ToPascalCase()))
+                    && !apiAction.ReturnType.Id.ToPascalCase().Equals("")
+                    && !viewModels.AsEnumerable()
+                                  .Any(item => item == apiAction.ReturnType.Id.ToPascalCase()))
                     viewModels.Add(apiAction.ReturnType.Id.ToPascalCase());
 
                 viewModels = viewModels.AsEnumerable()
@@ -112,15 +126,21 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiParametersViewModelsId(this IEnumerable<ApiParameterInfo> apiParameters)
         {
-            if (apiParameters.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
 
+            if (apiParameters.AsEnumerable() == null)
+                return viewModels;
+
             foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
-                if (apiActionParameter.IsModel()
+                if (apiActionParameter.Id != null
+                    && !apiActionParameter.Id.Equals("")
+                    && apiActionParameter.IsModel()
+                    && apiActionParameter.DataModel != null
+                    && apiActionParameter.DataModel.Id != null
+                    && !apiActionParameter.DataModel.Id.Equals("")
+                    && !apiActionParameter.TypeScriptType().ToPascalCase().Equals("")
                     && !viewModels.AsEnumerable()
-                                  .Contains(apiActionParameter.TypeScriptType().ToPascalCase()))
+                                  .Any(item => item == apiActionParameter.TypeScriptType().ToPascalCase()))
                     viewModels.Add(apiActionParameter.TypeScriptType().ToPascalCase());
 
             return viewModels;
@@ -133,20 +153,26 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionViewModelsEntities(this ApiActionInfo apiAction)
         {
-            if (apiAction == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (apiAction == null
+                || apiAction.Id == null
+                || apiAction.Id.Equals(""))
+                return viewModels;
 
             if (apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
-                    && !viewModels.AsEnumerable().Contains(apiAction.ReturnType))
+                    && !apiAction.ReturnType.Id.Equals("")
+                    && !viewModels.AsEnumerable()
+                                  .Any(item => item == apiAction.ReturnType))
                     viewModels.Add(apiAction.ReturnType);
 
+                EntityInfoComparer comparer = new EntityInfoComparer();
+
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable())
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable(), comparer)
                                        .ToList();
             }
 
@@ -161,15 +187,20 @@ namespace Common.Generator.Framework.Extensions
         public static List<EntityInfo> GetApiParametersViewModelsEntities(
             this IEnumerable<ApiParameterInfo> apiParameters)
         {
-            if (apiParameters.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
 
+            if (apiParameters.AsEnumerable() == null)
+                return viewModels;
+
             foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
-                if (apiActionParameter.IsModel()
+                if (apiActionParameter.Id != null
+                    && !apiActionParameter.Id.Equals("")
+                    && apiActionParameter.IsModel()
+                    && apiActionParameter.DataModel != null
+                    && apiActionParameter.DataModel.Id != null
+                    && !apiActionParameter.DataModel.Id.Equals("")
                     && !viewModels.AsEnumerable()
-                                  .Contains(apiActionParameter.DataModel))
+                                  .Any(item => item == apiActionParameter.DataModel))
                     viewModels.Add(apiActionParameter.DataModel);
 
             return viewModels;
@@ -183,17 +214,22 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiActionViewModelsId(this ApiActionInfo apiAction, string layoutAction)
         {
-            if (apiAction == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (apiAction == null
+                || apiAction.Id == null
+                || apiAction.Id.Equals("")
+                || layoutAction == null)
+                return viewModels;
 
             if (apiAction.Id.ToLower().Equals(layoutAction.ToLower())
                 && apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
-                    && !viewModels.AsEnumerable().Contains(apiAction.ReturnType.Id.ToPascalCase()))
+                    && !apiAction.ReturnType.Id.ToPascalCase().Equals("")
+                    && !viewModels.AsEnumerable()
+                                  .Any(item => item == apiAction.ReturnType.Id.ToPascalCase()))
                     viewModels.Add(apiAction.ReturnType.Id.ToPascalCase());
 
                 viewModels = viewModels.AsEnumerable()
@@ -212,17 +248,22 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionViewModelsEntities(this ApiActionInfo apiAction, string layoutAction)
         {
-            if (apiAction == null || layoutAction == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (apiAction == null
+                || apiAction.Id == null
+                || apiAction.Id.Equals("")
+                || layoutAction == null)
+                return viewModels;
 
             if (apiAction.Id.ToLower().Equals(layoutAction.ToLower())
                 && apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
-                    && !viewModels.AsEnumerable().Contains(apiAction.ReturnType))
+                    && !apiAction.ReturnType.Id.Equals("")
+                    && !viewModels.AsEnumerable()
+                                  .Any(item => item == apiAction.ReturnType))
                     viewModels.Add(apiAction.ReturnType);
 
                 viewModels = viewModels.AsEnumerable()

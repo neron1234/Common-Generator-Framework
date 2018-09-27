@@ -14,14 +14,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool HasMenu(this ConcernList concerns)
         {
+            bool result = false;
+
             if (concerns.AsEnumerable() == null)
-                throw new ArgumentNullException();
+                return result;
 
             foreach (ConcernInfo concern in concerns.AsEnumerable())
-                if (concern.GetMenu().AsEnumerable().Count() > 0)
+                if (concern.Id != null
+                    && !concern.Id.Equals("")
+                    && concern.GetMenu().AsEnumerable()
+                                        .Count() > 0)
                     return true;
 
-            return false;
+            return result;
         }
 
         /// <summary>
@@ -31,15 +36,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetConcernListDirectReferences(this ConcernList concerns)
         {
-            if (concerns == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> directReferences = new List<EntityInfo>();
 
+            if (concerns == null)
+                return directReferences;
+
             foreach (ConcernInfo concern in concerns.AsEnumerable())
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(concern.GetConcernDirectReferences().AsEnumerable())
-                                                   .ToList();
+                if (concern.Id != null
+                    && !concern.Id.Equals(""))
+                    directReferences = directReferences.AsEnumerable()
+                                                       .Union(concern.GetConcernDirectReferences().AsEnumerable())
+                                                       .ToList();
 
             return directReferences;
         }
@@ -51,15 +58,22 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A LayoutList.</returns>
         public static LayoutList GetLayouts(this ConcernList concerns)
         {
-            if (concerns == null)
-                throw new ArgumentNullException();
-
             LayoutList layouts = new LayoutList();
 
+            if (concerns == null)
+                return layouts;
+
             foreach (ConcernInfo concern in concerns)
-                layouts = layouts.AsEnumerable()
-                                 .Union(concern.Layouts.AsEnumerable())
-                                 .ToLayoutList();
+                if (concern.Id != null
+                    && !concern.Id.Equals("")
+                    && concern.Layouts != null
+                    && concern.Parent != null
+                    && concern.Layouts.Parent != null
+                    && concern.Layouts.Parent.Id != null
+                    && !concern.Layouts.Parent.Id.Equals(""))
+                    layouts = layouts.AsEnumerable()
+                                     .Union(concern.Layouts.AsEnumerable())
+                                     .ToLayoutList((ConcernInfo)concern.Layouts.Parent);
 
             return layouts;
         }

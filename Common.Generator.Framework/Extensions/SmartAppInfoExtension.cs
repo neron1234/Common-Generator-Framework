@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A 3-digit version in string.</returns>
         public static string GetVersion(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
+            string result = "0.0.0";
+
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return result;
 
             if (smartApp.Version != null)
-                return smartApp.Version.Major + "."
-                       + smartApp.Version.Minor + "."
+                return smartApp.Version.Major
+                       + "."
+                       + smartApp.Version.Minor
+                       + "."
                        + smartApp.Version.Release;
-            return "0.0.0";
+            return result;
         }
 
         /// <summary>
@@ -31,8 +38,12 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool HasMenu(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
+            bool result = false;
+
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return result;
 
             if (smartApp.Concerns.AsEnumerable() != null)
                 return smartApp.Concerns.HasMenu();
@@ -47,17 +58,24 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A tuple of a LayoutInfo with his associated ConcernInfo.</returns>
         public static Tuple<LayoutInfo, ConcernInfo> GetRootLayout(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return null;
 
             if (smartApp.Concerns.AsEnumerable() != null)
                 foreach (ConcernInfo concern in smartApp.Concerns.AsEnumerable())
                 {
-                    if (concern.Layouts.AsEnumerable() != null)
+                    if (concern.Id != null
+                        && !concern.Id.Equals("")
+                        && concern.Layouts.AsEnumerable() != null)
                         foreach (LayoutInfo layout in concern.Layouts.AsEnumerable())
-                            if (layout.IsRoot)
+                            if (layout.Id != null
+                                && !layout.Id.Equals("")
+                                && layout.IsRoot)
                                 return new Tuple<LayoutInfo, ConcernInfo>(layout, concern);
                 }
+
             return null;
         }
 
@@ -68,11 +86,14 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetModels(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
-
-            List<EntityInfo> specifiedModels = new List<EntityInfo>();
             List<EntityInfo> usedModels = new List<EntityInfo>();
+            List<EntityInfo> specifiedModels = new List<EntityInfo>();
+
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return usedModels;
+
 
             if (smartApp.Version != null
                 && smartApp.DataModel != null
@@ -93,12 +114,11 @@ namespace Common.Generator.Framework.Extensions
 
                 // Get indirect references.
                 foreach (EntityInfo entity in specifiedModels.AsEnumerable())
-                    if (entity.Id != null)
-                    {
+                    if (entity.Id != null
+                        && !entity.Id.Equals(""))
                         usedModels = usedModels.AsEnumerable()
                                                .Union(entity.GetEntityIndirectReferences().AsEnumerable())
                                                .ToList();
-                    }
 
                 usedModels = usedModels.AsEnumerable()
                                        .Union(specifiedModels.AsEnumerable())
@@ -115,14 +135,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetViewModels(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> usedViewModels = new List<EntityInfo>();
+
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return usedViewModels;
+
+            EntityInfoComparer comparer = new EntityInfoComparer();
+
             if (smartApp.Version != null
                 && smartApp.Api.AsEnumerable() != null)
                 usedViewModels = usedViewModels.AsEnumerable()
-                                               .Union(smartApp.Api.GetApiListViewModelsEntities().AsEnumerable())
+                                               .Union(smartApp.Api.GetApiListViewModelsEntities().AsEnumerable(), comparer)
                                                .ToList();
 
             return usedViewModels;
@@ -135,16 +160,23 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A LayoutList.</returns>
         public static LayoutList GetLayouts(this SmartAppInfo smartApp)
         {
-            if (smartApp == null)
-                throw new ArgumentNullException();
-
             LayoutList layouts = new LayoutList();
+
+            if (smartApp == null
+                || smartApp.Id == null
+                || smartApp.Id.Equals(""))
+                return layouts;
+
 
             if (smartApp.Version != null
                 && smartApp.Concerns != null)
+            {
+                var listToRetrieve = smartApp.Concerns.GetLayouts();
+                var parent = listToRetrieve.Parent;
                 layouts = layouts.AsEnumerable()
-                                 .Union(smartApp.Concerns.GetLayouts().AsEnumerable())
-                                 .ToLayoutList();
+                                 .Union(listToRetrieve)
+                                 .ToLayoutList((ConcernInfo)parent);
+            }
 
             return layouts;
         }

@@ -14,16 +14,21 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>An action name.</returns>
         public static string GetAction(this ActionInfo action)
         {
-            if (action == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals(""))
+                return result;
 
             char delimiter = '.';
 
             if (action.Type != null
                 && action.Api != null
-                && action.Type.IsDataAction())
+                && action.Type.IsDataAction()
+                && !action.Api.Equals(""))
                 return action.Api.Split(delimiter)[1];
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -33,16 +38,21 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service name.</returns>
         public static string GetService(this ActionInfo action)
         {
-            if (action == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals(""))
+                return result;
 
             char delimiter = '.';
 
             if (action.Type != null
                 && action.Api != null
-                && action.Type.IsDataAction())
+                && action.Type.IsDataAction()
+                && !action.Api.Equals(""))
                 return action.Api.Split(delimiter)[0];
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -52,15 +62,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A concern id.</returns>
         public static string GetTargetedConcern(this ActionInfo action)
         {
-            if (action == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals(""))
+                return result;
 
             char delimiter = '.';
 
-            if (action.Target != null)
+            if (action.Target != null
+                && !action.Target.Equals(""))
                 return action.Target.Split(delimiter)[0];
 
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -70,15 +85,20 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A layout id.</returns>
         public static string GetTargetedLayout(this ActionInfo action)
         {
-            if (action == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals(""))
+                return result;
 
             char delimiter = '.';
 
-            if (action.Target != null)
+            if (action.Target != null
+                && !action.Target.Equals(""))
                 return action.Target.Split(delimiter)[1];
 
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -89,13 +109,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetActionViewModelsId(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<string> viewModels = new List<string>();
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals("")
+                || apis.AsEnumerable() == null)
+                return viewModels;
+
             string apiAction = action.GetAction();
 
-            if (apiAction != null)
+            if (apiAction != null
+                && !apiAction.Equals(""))
                 viewModels = viewModels.AsEnumerable()
                                        .Union(apis.GetApiListViewModelsId(apiAction).AsEnumerable())
                                        .ToList();
@@ -111,13 +136,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service id.</returns>
         public static string GetActionService(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis.AsEnumerable() == null)
-                throw new ArgumentNullException();
+            string result = "";
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals("")
+                || apis.AsEnumerable() == null)
+                return result;
 
             string apiService = action.GetService();
-            string result = null;
 
-            if (apiService != null)
+            if (apiService != null
+                && !apiService.Equals(""))
                 result = apis.GetApiListService(apiService);
 
             return result;
@@ -130,13 +160,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetActionViewModelsEntities(this ActionInfo action, ApiList apis)
         {
-            if (action == null || apis.AsEnumerable() == null)
-                throw new ArgumentNullException();
-
             List<EntityInfo> viewModels = new List<EntityInfo>();
+
+            if (action == null
+                || action.Id == null
+                || action.Id.Equals("")
+                || apis.AsEnumerable() == null)
+                return viewModels;
+
             string apiAction = action.GetAction();
 
-            if (apiAction != null)
+            if (apiAction != null
+                && !apiAction.Equals(""))
                 viewModels = viewModels.AsEnumerable()
                                        .Union(apis.GetApiListViewModelsEntities(apiAction).AsEnumerable())
                                        .ToList();
