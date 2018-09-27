@@ -1,48 +1,55 @@
 ﻿using Mobioos.Foundation.Jade.Models;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Generator.Framework.Comparer
 {
-    public class ReferenceInfoComparer : IEqualityComparer<ReferenceInfo>
+    public class ReferenceInfoComparer : PropertyInfoComparer, IEqualityComparer<ReferenceInfo>
     {
         public bool Equals(ReferenceInfo x, ReferenceInfo y)
         {
-            if (x == null && y == null)
-                return true;
+            bool result = base.Equals(x, y);
 
-            if (x == null && y != null)
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            PropertyInfoComparer propertyComparer = new PropertyInfoComparer();
+
+            if (x.ForeignKey != y.ForeignKey
+                || !propertyComparer.Equals(x.Property, y.Property)
+                || !entityComparer.Equals(x.Reference, y.Reference))
                 return false;
 
-            if (x != null && y == null)
-                return false;
-
-            if (x.Id != null
-                && y.Id != null
-                && x.Id.Equals(y.Id)
-                && x.IsCollection.Equals(y.IsCollection)
-                && x.IsKey.Equals(y.IsKey)
-                && x.ForeignKey.Equals(y.ForeignKey)
-                && x.Type.Equals(y.Type)
-                && ((x.ModelProperty != null
-                     && y.ModelProperty != null
-                     && x.ModelProperty.Equals(y.ModelProperty))
-                   || (x.ModelProperty == null
-                       && y.ModelProperty == null))
-                && x.Target != null
-                && y.Target != null
-                && x.Target.Equals(y.Target)
-                && x.)
-                return true;
-
-            return false;
+            return result;
         }
 
         public int GetHashCode(ReferenceInfo obj)
         {
-            int result = obj.GetHashCode();
-            Int32.TryParse(obj.Id, out result);
-            return result;
+            return base.GetHashCode(obj);
+        }
+    }
+
+    public class ReferenceInfoListComparer : IEqualityComparer<IEnumerable<ReferenceInfo>>
+    {
+        public bool Equals(IEnumerable<ReferenceInfo> x, IEnumerable<ReferenceInfo> y)
+        {
+            if (ReferenceEquals(x, y))
+                return true;
+
+            if (x == null || y == null)
+                return false;
+
+            ReferenceInfoComparer comparer = new ReferenceInfoComparer();
+
+            foreach (ReferenceInfo reference in x.AsEnumerable())
+                if (!y.AsEnumerable()
+                      .Any(item => comparer.Equals(item, reference)))
+                    return false;
+
+            return true;
+        }
+
+        public int GetHashCode(IEnumerable<ReferenceInfo> obj)
+        {
+            return obj.ToString().GetHashCode();
         }
     }
 }

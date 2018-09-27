@@ -1,7 +1,5 @@
 ﻿using Mobioos.Foundation.Jade.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Common.Generator.Framework.Comparer
 {
@@ -9,37 +7,34 @@ namespace Common.Generator.Framework.Comparer
     {
         public bool Equals(EntityInfo x, EntityInfo y)
         {
-            if (x.Id == y.Id)
-            {
-                foreach (PropertyInfo property in x.Properties.AsEnumerable())
-                    if (property.Id != null
-                        && !property.Id.Equals("")
-                        && !y.Properties.AsEnumerable()
-                                     .Any(item => item.Id == property.Id
-                                               && item.IsCollection == property.IsCollection
-                                               && item.IsKey == property.IsKey))
-                        return false;
-
-                foreach (ReferenceInfo reference in x.References.AsEnumerable())
-                    if (!y.References.AsEnumerable()
-                                     .Any(item => item.Id == reference.Id
-                                               && item.ForeignKey == reference.ForeignKey
-                                               && 
-                                               && item.IsCollection == reference.IsCollection
-                                               && item.IsKey == reference.IsKey))
-                        return false;
-
+            if (ReferenceEquals(x, y))
                 return true;
-            }
 
-            return false;
+            if (x == null || y == null)
+                return false;
+
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            PropertyInfoListComparer propertyListComparer = new PropertyInfoListComparer();
+            ReferenceInfoListComparer referenceListComparer = new ReferenceInfoListComparer();
+            ValueInfoListComparer valueListComparer = new ValueInfoListComparer();
+
+            if (x.Id != y.Id
+                || x.Extends != y.Extends
+                || x.Description != y.Description
+                || !entityComparer.Equals(x.BaseEntity, y.BaseEntity)
+                || x.IsAbstract != y.IsAbstract
+                || x.IsEnum != y.IsEnum
+                || !propertyListComparer.Equals(x.Properties, y.Properties)
+                || !referenceListComparer.Equals(x.References, y.References)
+                || !valueListComparer.Equals(x.Values, y.Values))
+                return false;
+
+            return true;
         }
 
         public int GetHashCode(EntityInfo obj)
         {
-            int result = obj.GetHashCode();
-            Int32.TryParse(obj.Id, out result);
-            return result;
+            return string.Concat(obj.Id, obj.Description).GetHashCode();
         }
     }
 }

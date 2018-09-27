@@ -1,5 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
-using System;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -120,18 +120,20 @@ namespace Common.Generator.Framework.Extensions
                 || property.Id.Equals(""))
                 return indirectReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (property.Parent != null
                 && property.Parent.Id != null
                 && !property.Parent.Id.Equals("")
                 && !indirectReferences.AsEnumerable()
-                                      .Any(item => item == (EntityInfo)property.Parent))
+                                      .Any(item => entityComparer.Equals(item, (EntityInfo)property.Parent)))
                 indirectReferences.Add((EntityInfo)property.Parent);
 
             if (property.Target != null
                 && property.Target.Id != null
                 && !property.Target.Id.Equals("")
                 && !indirectReferences.AsEnumerable()
-                                      .Any(item => item == property.Target))
+                                      .Any(item => entityComparer.Equals(item, property.Target)))
                 indirectReferences.Add(property.Target);
 
             return indirectReferences;

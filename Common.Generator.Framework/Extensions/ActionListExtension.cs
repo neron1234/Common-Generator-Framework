@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +47,14 @@ namespace Common.Generator.Framework.Extensions
                 || apis == null)
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (layoutActions.AsEnumerable() != null)
                 foreach (ActionInfo action in layoutActions.AsEnumerable())
                     if (action.Id != null
                         && !action.Id.Equals(""))
                         viewModels = viewModels.AsEnumerable()
-                                               .Union(action.GetActionViewModelsEntities(apis).AsEnumerable())
+                                               .Union(action.GetActionViewModelsEntities(apis).AsEnumerable(), entityComparer)
                                                .ToList();
 
             return viewModels;

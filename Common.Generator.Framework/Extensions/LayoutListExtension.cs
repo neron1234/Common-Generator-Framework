@@ -1,5 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
-using System;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,11 +19,13 @@ namespace Common.Generator.Framework.Extensions
             if (layouts.AsEnumerable() == null)
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (LayoutInfo layout in layouts)
                 if (layout.Id != null
                     && !layout.Id.Equals(""))
                     directReferences = directReferences.AsEnumerable()
-                                                       .Union(layout.GetLayoutDirectReferences().AsEnumerable())
+                                                       .Union(layout.GetLayoutDirectReferences().AsEnumerable(), entityComparer)
                                                        .ToList();
 
             return directReferences;
@@ -33,6 +35,7 @@ namespace Common.Generator.Framework.Extensions
         /// Convert an IEnumerable to a LayoutList
         /// </summary>
         /// <param name="layouts">A list of LayoutInfo objects.</param>
+        /// <param name="parent">A ConcernInfo object.</param>
         /// <returns>A LayoutList</returns>
         public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts, ConcernInfo parent)
         {
@@ -40,13 +43,33 @@ namespace Common.Generator.Framework.Extensions
 
             if (parent != null
                 && !parent.Id.Equals(""))
-            {
-                result.Parent = parent;
                 foreach (LayoutInfo layout in layouts)
                     if (layout.Id != null
                         && !layout.Id.Equals(""))
+                    {
                         result.Add(layout);
-            }
+                        result.Last().Parent = parent;
+                    }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Convert an IEnumerable to a LayoutList
+        /// </summary>
+        /// <param name="layouts">A list of LayoutInfo objects.</param>
+        /// <returns>A LayoutList</returns>
+        public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts)
+        {
+            LayoutList result = new LayoutList();
+            foreach (LayoutInfo layout in layouts)
+                if (layout.Id != null
+                    && !layout.Id.Equals(""))
+                {
+                    var parent = layout.Parent;
+                    result.Add(layout);
+                    result.Last().Parent = parent;
+                }
 
             return result;
         }

@@ -1,4 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,11 +42,13 @@ namespace Common.Generator.Framework.Extensions
             if (concerns == null)
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (ConcernInfo concern in concerns.AsEnumerable())
                 if (concern.Id != null
                     && !concern.Id.Equals(""))
                     directReferences = directReferences.AsEnumerable()
-                                                       .Union(concern.GetConcernDirectReferences().AsEnumerable())
+                                                       .Union(concern.GetConcernDirectReferences().AsEnumerable(), entityComparer)
                                                        .ToList();
 
             return directReferences;
@@ -63,17 +66,15 @@ namespace Common.Generator.Framework.Extensions
             if (concerns == null)
                 return layouts;
 
+            LayoutInfoComparer layoutComparer = new LayoutInfoComparer();
+
             foreach (ConcernInfo concern in concerns)
                 if (concern.Id != null
                     && !concern.Id.Equals("")
-                    && concern.Layouts != null
-                    && concern.Parent != null
-                    && concern.Layouts.Parent != null
-                    && concern.Layouts.Parent.Id != null
-                    && !concern.Layouts.Parent.Id.Equals(""))
+                    && concern.Layouts != null)
                     layouts = layouts.AsEnumerable()
-                                     .Union(concern.Layouts.AsEnumerable())
-                                     .ToLayoutList((ConcernInfo)concern.Layouts.Parent);
+                                     .Union(concern.Layouts.ToLayoutList(concern).AsEnumerable(), layoutComparer)
+                                     .ToLayoutList();
 
             return layouts;
         }

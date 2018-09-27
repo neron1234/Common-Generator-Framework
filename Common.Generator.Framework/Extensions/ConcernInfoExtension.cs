@@ -1,5 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
-using System;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -49,9 +49,11 @@ namespace Common.Generator.Framework.Extensions
                 || concern.Id.Equals(""))
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (concern.Layouts.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
-                                                   .Union(concern.Layouts.GetLayoutListDirectReferences().AsEnumerable())
+                                                   .Union(concern.Layouts.GetLayoutListDirectReferences().AsEnumerable(), entityComparer)
                                                    .ToList();
 
             return directReferences;

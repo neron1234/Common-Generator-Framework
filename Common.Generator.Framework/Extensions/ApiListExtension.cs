@@ -20,11 +20,13 @@ namespace Common.Generator.Framework.Extensions
             if (apis.AsEnumerable() == null)
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (ApiInfo api in apis)
                 if (api.Id != null
                     && !api.Id.Equals(""))
                     directReferences = directReferences.AsEnumerable()
-                                                       .Union(api.GetApiDirectReferences().AsEnumerable())
+                                                       .Union(api.GetApiDirectReferences().AsEnumerable(), entityComparer)
                                                        .ToList();
 
             return directReferences;
@@ -88,13 +90,13 @@ namespace Common.Generator.Framework.Extensions
             if (apis == null)
                 return viewModels;
 
-            EntityInfoComparer comparer = new EntityInfoComparer();
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
 
             foreach (ApiInfo api in apis.AsEnumerable())
                 if (api.Id != null
                     && !api.Id.Equals(""))
                     viewModels = viewModels.AsEnumerable()
-                                           .Union(api.GetApiViewModelsEntities().AsEnumerable(), comparer)
+                                           .Union(api.GetApiViewModelsEntities().AsEnumerable(), entityComparer)
                                            .ToList();
 
             return viewModels;
@@ -114,11 +116,13 @@ namespace Common.Generator.Framework.Extensions
                 || layoutAction == null)
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (ApiInfo api in apis.AsEnumerable())
                 if (api.Id != null
                     && !api.Id.Equals(""))
                     viewModels = viewModels.AsEnumerable()
-                                           .Union(api.GetApiViewModelsEntities(layoutAction).AsEnumerable())
+                                           .Union(api.GetApiViewModelsEntities(layoutAction).AsEnumerable(), entityComparer)
                                            .ToList();
 
             return viewModels;

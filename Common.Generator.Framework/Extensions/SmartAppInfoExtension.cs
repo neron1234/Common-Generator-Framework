@@ -94,6 +94,7 @@ namespace Common.Generator.Framework.Extensions
                 || smartApp.Id.Equals(""))
                 return usedModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
 
             if (smartApp.Version != null
                 && smartApp.DataModel != null
@@ -103,13 +104,13 @@ namespace Common.Generator.Framework.Extensions
                 // Search for references in layout's datamodels
                 if (smartApp.Concerns.AsEnumerable() != null)
                     specifiedModels = specifiedModels.AsEnumerable()
-                                                     .Union(smartApp.Concerns.GetConcernListDirectReferences().AsEnumerable())
+                                                     .Union(smartApp.Concerns.GetConcernListDirectReferences().AsEnumerable(), entityComparer)
                                                      .ToList();
 
                 // Search for references in api's datamodels
                 if (smartApp.Api.AsEnumerable() != null)
                     specifiedModels = specifiedModels.AsEnumerable()
-                                                     .Union(smartApp.Api.GetApiListDirectReferences().AsEnumerable())
+                                                     .Union(smartApp.Api.GetApiListDirectReferences().AsEnumerable(), entityComparer)
                                                      .ToList();
 
                 // Get indirect references.
@@ -117,11 +118,11 @@ namespace Common.Generator.Framework.Extensions
                     if (entity.Id != null
                         && !entity.Id.Equals(""))
                         usedModels = usedModels.AsEnumerable()
-                                               .Union(entity.GetEntityIndirectReferences().AsEnumerable())
+                                               .Union(entity.GetEntityIndirectReferences().AsEnumerable(), entityComparer)
                                                .ToList();
 
                 usedModels = usedModels.AsEnumerable()
-                                       .Union(specifiedModels.AsEnumerable())
+                                       .Union(specifiedModels.AsEnumerable(), entityComparer)
                                        .ToList();
             }
 
@@ -142,12 +143,12 @@ namespace Common.Generator.Framework.Extensions
                 || smartApp.Id.Equals(""))
                 return usedViewModels;
 
-            EntityInfoComparer comparer = new EntityInfoComparer();
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
 
             if (smartApp.Version != null
                 && smartApp.Api.AsEnumerable() != null)
                 usedViewModels = usedViewModels.AsEnumerable()
-                                               .Union(smartApp.Api.GetApiListViewModelsEntities().AsEnumerable(), comparer)
+                                               .Union(smartApp.Api.GetApiListViewModelsEntities().AsEnumerable(), entityComparer)
                                                .ToList();
 
             return usedViewModels;
@@ -167,15 +168,15 @@ namespace Common.Generator.Framework.Extensions
                 || smartApp.Id.Equals(""))
                 return layouts;
 
+            LayoutInfoComparer layoutComparer = new LayoutInfoComparer();
 
             if (smartApp.Version != null
                 && smartApp.Concerns != null)
             {
                 var listToRetrieve = smartApp.Concerns.GetLayouts();
-                var parent = listToRetrieve.Parent;
                 layouts = layouts.AsEnumerable()
-                                 .Union(listToRetrieve)
-                                 .ToLayoutList((ConcernInfo)parent);
+                                 .Union(listToRetrieve.AsEnumerable(), layoutComparer)
+                                 .ToLayoutList();
             }
 
             return layouts;

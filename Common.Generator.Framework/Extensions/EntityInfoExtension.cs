@@ -1,5 +1,5 @@
-﻿using Mobioos.Foundation.Jade.Models;
-using System;
+﻿using Common.Generator.Framework.Comparer;
+using Mobioos.Foundation.Jade.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,16 +24,23 @@ namespace Common.Generator.Framework.Extensions
                 || entity.Id.Equals(""))
                 return result;
 
+            PropertyInfoComparer propertyComparer = new PropertyInfoComparer();
+            ReferenceInfoComparer referenceComparer = new ReferenceInfoComparer();
+
             if (entity.BaseEntity != null)
                 foreach (PropertyInfo property in entity.BaseEntity.GetLinkedProperties().AsEnumerable())
                     if (property.Id != null
-                        && !property.Id.Equals(""))
+                        && !property.Id.Equals("")
+                        && !result.AsEnumerable()
+                                  .Any(item => propertyComparer.Equals(item, property)))
                         result.Add(property);
 
             if (entity.Properties.AsEnumerable() != null)
                 foreach (PropertyInfo property in entity.Properties.AsEnumerable())
                     if (property.Id != null
-                        && !property.Id.Equals(""))
+                        && !property.Id.Equals("")
+                        && !result.AsEnumerable()
+                                  .Any(item => propertyComparer.Equals(item, property)))
                         result.Add(property);
 
             if (entity.References.AsEnumerable() != null)
@@ -45,17 +52,24 @@ namespace Common.Generator.Framework.Extensions
                         && !reference.Target.IsAbstract
                         && !reference.IsCollection)
                     {
-                        if (reference.Target.IsEnum)
+                        if (reference.Target.IsEnum
+                            && !result.AsEnumerable()
+                                      .Any(item => referenceComparer.Equals(item, reference)))
                             result.Add(reference);
                         else
                             foreach (PropertyInfo property in reference.Target.GetLinkedProperties().AsEnumerable())
                                 if (property.Id != null
-                                    && !property.Id.Equals(""))
+                                    && !property.Id.Equals("")
+                                    && !result.AsEnumerable()
+                                              .Any(item => propertyComparer.Equals(item, property)))
                                     result.Add(property);
                     }
                     else if (reference.Id != null
-                             && !reference.Id.Equals(""))
+                             && !reference.Id.Equals("")
+                             && !result.AsEnumerable()
+                                       .Any(item => referenceComparer.Equals(item, reference)))
                         result.Add(reference);
+
             return result;
         }
 
@@ -75,22 +89,31 @@ namespace Common.Generator.Framework.Extensions
                 || entity.Id.Equals(""))
                 return result;
 
+            PropertyInfoComparer propertyComparer = new PropertyInfoComparer();
+            ReferenceInfoComparer referenceComparer = new ReferenceInfoComparer();
+
             if (entity.BaseEntity != null)
                 foreach (PropertyInfo property in entity.BaseEntity.GetProperties().AsEnumerable())
                     if (property.Id != null
-                        && !property.Id.Equals(""))
+                        && !property.Id.Equals("")
+                        && !result.AsEnumerable()
+                                  .Any(item => propertyComparer.Equals(item, property)))
                         result.Add(property);
 
             if (entity.Properties.AsEnumerable() != null)
                 foreach (PropertyInfo property in entity.Properties.AsEnumerable())
                     if (property.Id != null
-                        && !property.Id.Equals(""))
+                        && !property.Id.Equals("")
+                        && !result.AsEnumerable()
+                                  .Any(item => propertyComparer.Equals(item, property)))
                         result.Add(property);
 
             if (entity.References.AsEnumerable() != null)
                 foreach (ReferenceInfo reference in entity.References.AsEnumerable())
                     if (reference.Id != null
-                        && !reference.Id.Equals(""))
+                        && !reference.Id.Equals("")
+                        && !result.AsEnumerable()
+                                  .Any(item => referenceComparer.Equals(item, reference)))
                         result.Add(reference);
 
             return result;
@@ -110,13 +133,15 @@ namespace Common.Generator.Framework.Extensions
                 || entity.Id.Equals(""))
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (entity.References.AsEnumerable() != null)
                 foreach (ReferenceInfo reference in entity.References.AsEnumerable())
                     if (reference.Target != null
                         && reference.Target.Id != null
                         && !reference.Target.Id.Equals("")
                         && !directReferences.AsEnumerable()
-                                            .Any(item => item == reference.Target))
+                                            .Any(item => entityComparer.Equals(item, reference.Target)))
                         directReferences.Add(reference.Target);
 
             return directReferences;
@@ -136,11 +161,13 @@ namespace Common.Generator.Framework.Extensions
                 || entity.Id.Equals(""))
                 return allIndirectReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (PropertyInfo property in entity.GetLinkedProperties().AsEnumerable())
                 if (property.Id != null
                     && !property.Id.Equals(""))
                     allIndirectReferences = allIndirectReferences.AsEnumerable()
-                                                                 .Union(property.GetIndirectReferences().AsEnumerable())
+                                                                 .Union(property.GetIndirectReferences().AsEnumerable(), entityComparer)
                                                                  .ToList();
 
             return allIndirectReferences;

@@ -50,9 +50,11 @@ namespace Common.Generator.Framework.Extensions
                 || apiAction.Id.Equals(""))
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (apiAction.Parameters.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
-                                                   .Union(apiAction.Parameters.GetApiParametersDirectReferences().AsEnumerable())
+                                                   .Union(apiAction.Parameters.GetApiParametersDirectReferences().AsEnumerable(), entityComparer)
                                                    .ToList();
 
             if (apiAction.ReturnType != null
@@ -60,7 +62,7 @@ namespace Common.Generator.Framework.Extensions
                 && !apiAction.ReturnType.Id.Equals("")
                 && apiAction.ReturnType.References.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
-                                                   .Union(apiAction.ReturnType.GetEntityDirectReferences().AsEnumerable())
+                                                   .Union(apiAction.ReturnType.GetEntityDirectReferences().AsEnumerable(), entityComparer)
                                                    .ToList();
 
             return directReferences;
@@ -78,11 +80,13 @@ namespace Common.Generator.Framework.Extensions
             if (apiParameters.AsEnumerable() == null)
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
                 if (apiActionParameter.Id != null
                     && !apiActionParameter.Id.Equals(""))
                     directReferences = directReferences.AsEnumerable()
-                                                       .Union(apiActionParameter.GetApiParameterDirectReferences().AsEnumerable())
+                                                       .Union(apiActionParameter.GetApiParameterDirectReferences().AsEnumerable(), entityComparer)
                                                        .ToList();
 
             return directReferences;
@@ -160,19 +164,19 @@ namespace Common.Generator.Framework.Extensions
                 || apiAction.Id.Equals(""))
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (apiAction.Parameters.AsEnumerable() != null)
             {
                 if (apiAction.ReturnType != null
                     && apiAction.ReturnType.Id != null
                     && !apiAction.ReturnType.Id.Equals("")
                     && !viewModels.AsEnumerable()
-                                  .Any(item => item == apiAction.ReturnType))
+                                  .Any(item => entityComparer.Equals(item, apiAction.ReturnType)))
                     viewModels.Add(apiAction.ReturnType);
 
-                EntityInfoComparer comparer = new EntityInfoComparer();
-
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable(), comparer)
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable(), entityComparer)
                                        .ToList();
             }
 
@@ -192,6 +196,8 @@ namespace Common.Generator.Framework.Extensions
             if (apiParameters.AsEnumerable() == null)
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             foreach (ApiParameterInfo apiActionParameter in apiParameters.AsEnumerable())
                 if (apiActionParameter.Id != null
                     && !apiActionParameter.Id.Equals("")
@@ -200,7 +206,7 @@ namespace Common.Generator.Framework.Extensions
                     && apiActionParameter.DataModel.Id != null
                     && !apiActionParameter.DataModel.Id.Equals("")
                     && !viewModels.AsEnumerable()
-                                  .Any(item => item == apiActionParameter.DataModel))
+                                  .Any(item => entityComparer.Equals(item, apiActionParameter.DataModel)))
                     viewModels.Add(apiActionParameter.DataModel);
 
             return viewModels;
@@ -256,6 +262,8 @@ namespace Common.Generator.Framework.Extensions
                 || layoutAction == null)
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (apiAction.Id.ToLower().Equals(layoutAction.ToLower())
                 && apiAction.Parameters.AsEnumerable() != null)
             {
@@ -263,11 +271,11 @@ namespace Common.Generator.Framework.Extensions
                     && apiAction.ReturnType.Id != null
                     && !apiAction.ReturnType.Id.Equals("")
                     && !viewModels.AsEnumerable()
-                                  .Any(item => item == apiAction.ReturnType))
+                                  .Any(item => entityComparer.Equals(item, apiAction.ReturnType)))
                     viewModels.Add(apiAction.ReturnType);
 
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable())
+                                       .Union(apiAction.Parameters.AsEnumerable().GetApiParametersViewModelsEntities().AsEnumerable(), entityComparer)
                                        .ToList();
             }
 

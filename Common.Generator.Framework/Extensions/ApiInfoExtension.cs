@@ -22,9 +22,11 @@ namespace Common.Generator.Framework.Extensions
                 || api.Id.Equals(""))
                 return directReferences;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (api.Actions.AsEnumerable() != null)
                 directReferences = directReferences.AsEnumerable()
-                                                   .Union(api.Actions.GetApiActionListDirectReferences().AsEnumerable())
+                                                   .Union(api.Actions.GetApiActionListDirectReferences().AsEnumerable(), entityComparer)
                                                    .ToList();
 
             return directReferences;
@@ -90,11 +92,11 @@ namespace Common.Generator.Framework.Extensions
                 || api.Id.Equals(""))
                 return viewModels;
 
-            EntityInfoComparer comparer = new EntityInfoComparer();
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
 
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsEntities().AsEnumerable(), comparer)
+                                       .Union(api.Actions.GetApiActionListViewModelsEntities().AsEnumerable(), entityComparer)
                                        .ToList();
 
             return viewModels;
@@ -115,9 +117,11 @@ namespace Common.Generator.Framework.Extensions
                 || layoutAction == null)
                 return viewModels;
 
+            EntityInfoComparer entityComparer = new EntityInfoComparer();
+
             if (api.Actions.AsEnumerable() != null)
                 viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsEntities(layoutAction).AsEnumerable())
+                                       .Union(api.Actions.GetApiActionListViewModelsEntities(layoutAction).AsEnumerable(), entityComparer)
                                        .ToList();
 
             return viewModels;
