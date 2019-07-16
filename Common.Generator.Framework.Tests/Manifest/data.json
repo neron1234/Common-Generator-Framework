@@ -1,12 +1,147 @@
 {
   "entities": [
     {
-      "id": "Identifier",
-      "isAbstract": true,
+      "id": "Recipe",
+      "extends": "Identifier",
+      "isAbstract": false,
       "isEnum": false,
       "properties": [
         {
-          "id": "Id",
+          "id": "title",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "type",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "difficulty",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "time",
+          "type": "number",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "cost",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "picture",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "howManyPersons",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "creationDate",
+          "type": "date",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        },
+        {
+          "id": "authorId",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": false,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": "User.id"
+        }
+      ],
+      "references": [
+        {
+          "id": "ingredients",
+          "foreignKey": "id",
+          "type": "Ingredient",
+          "isCollection": true,
+          "isRequired": true
+        },
+        {
+          "id": "prepSteps",
+          "foreignKey": "id",
+          "type": "PrepStep",
+          "isCollection": true,
+          "isRequired": true
+        }
+      ],
+      "values": []
+    },
+    {
+      "id": "Ingredient",
+      "extends": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "title",
+          "type": "string",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": ""
+        }
+      ],
+      "references": [],
+      "values": []
+    },
+    {
+      "id": "Identifier",
+      "isAbstract": false,
+      "isEnum": false,
+      "properties": [
+        {
+          "id": "id",
           "type": "integer",
           "isKey": true,
           "isCollection": false,
@@ -20,86 +155,27 @@
       "values": []
     },
     {
-      "id": "Card",
+      "id": "PrepStep",
       "extends": "Identifier",
       "isAbstract": false,
       "isEnum": false,
       "properties": [
         {
-          "id": "PublicationDate",
-          "type": "date",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "Content",
+          "id": "title",
           "type": "string",
           "isKey": false,
           "isCollection": false,
-          "isRequired": false,
+          "isRequired": true,
           "minimum": 0,
           "maximum": 0,
           "modelProperty": ""
         },
         {
-          "id": "Type",
+          "id": "description",
           "type": "string",
           "isKey": false,
           "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        }
-      ],
-      "references": [
-        {
-          "id": "CreatedBy",
-          "foreignKey": "UserId",
-          "type": "UserProfile",
-          "isCollection": false,
-          "isRequired": false
-        },
-        {
-          "id": "Photo",
-          "foreignKey": "Id",
-          "type": "Photo",
-          "isCollection": false,
-          "isRequired": false
-        },
-        {
-          "id": "TargetGroups",
-          "foreignKey": "Id",
-          "type": "Group",
-          "isCollection": true,
-          "isRequired": false
-        },
-        {
-          "id": "Choices",
-          "foreignKey": "Id",
-          "type": "Choice",
-          "isCollection": true,
-          "isRequired": false
-        }
-      ],
-      "values": []
-    },
-    {
-      "id": "Idea",
-      "extends": "Card",
-      "isAbstract": false,
-      "isEnum": false,
-      "properties": [
-        {
-          "id": "EndDate",
-          "type": "date",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
+          "isRequired": true,
           "minimum": 0,
           "maximum": 0,
           "modelProperty": ""
@@ -109,132 +185,17 @@
       "values": []
     },
     {
-      "id": "Group",
+      "id": "User",
       "extends": "Identifier",
       "isAbstract": false,
       "isEnum": false,
       "properties": [
         {
-          "id": "Name",
+          "id": "username",
           "type": "string",
           "isKey": false,
           "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "GroupDepartment",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "City",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "CreationDate",
-          "type": "date",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "Country",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        }
-      ],
-      "references": [
-        {
-          "id": "CreatedBy",
-          "foreignKey": "UserId",
-          "type": "UserProfile",
-          "isCollection": false,
-          "isRequired": false
-        },
-        {
-          "id": "Users",
-          "foreignKey": "UserId",
-          "type": "UserProfile",
-          "isCollection": true,
-          "isRequired": false
-        }
-      ],
-      "values": []
-    },
-    {
-      "id": "UserProfile",
-      "extends": "Identifier",
-      "isAbstract": false,
-      "isEnum": false,
-      "properties": [
-        {
-          "id": "UserId",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "Job",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "Department",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "City",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        },
-        {
-          "id": "Country",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
+          "isRequired": true,
           "minimum": 0,
           "maximum": 0,
           "modelProperty": ""
@@ -244,136 +205,73 @@
       "values": []
     },
     {
-      "id": "Choice",
+      "id": "Like",
       "extends": "Identifier",
       "isAbstract": false,
       "isEnum": false,
       "properties": [
         {
-          "id": "Name",
-          "type": "string",
+          "id": "userId",
+          "type": "integer",
           "isKey": false,
           "isCollection": false,
-          "isRequired": false,
+          "isRequired": true,
           "minimum": 0,
           "maximum": 0,
-          "modelProperty": ""
+          "modelProperty": "User.id"
+        },
+        {
+          "id": "recipeId",
+          "type": "integer",
+          "isKey": false,
+          "isCollection": false,
+          "isRequired": true,
+          "minimum": 0,
+          "maximum": 0,
+          "modelProperty": "Recipe.id"
         }
       ],
       "references": [],
       "values": []
     },
     {
-      "id": "Answer",
-      "extends": "Identifier",
-      "isAbstract": true,
-      "isEnum": false,
-      "properties": [
-        {
-          "id": "AnswerDate",
-          "type": "date",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        }
-      ],
-      "references": [
-        {
-          "id": "AnsweredBy",
-          "foreignKey": "UserId",
-          "type": "UserProfile",
-          "isCollection": false,
-          "isRequired": false
-        }
-      ],
-      "values": []
-    },
-    {
-      "id": "IdeaAnswer",
-      "extends": "Answer",
+      "id": "RecipeDifficulty",
       "isAbstract": false,
-      "isEnum": false,
+      "isEnum": true,
       "properties": [],
-      "references": [
+      "references": [],
+      "values": [
         {
-          "id": "IdeaCard",
-          "foreignKey": "Id",
-          "type": "Idea",
-          "isCollection": false,
-          "isRequired": false
+          "id": "Easy"
         },
         {
-          "id": "IdeaChoice",
-          "foreignKey": "Id",
-          "type": "Choice",
-          "isCollection": false,
-          "isRequired": false
+          "id": "Medium"
+        },
+        {
+          "id": "Hard"
         }
-      ],
-      "values": []
+      ]
     },
     {
-      "id": "Reporting",
-      "extends": "Card",
+      "id": "RecipeType",
       "isAbstract": false,
-      "isEnum": false,
-      "properties": [
+      "isEnum": true,
+      "properties": [],
+      "references": [],
+      "values": [
         {
-          "id": "Results",
-          "type": "number",
-          "isKey": false,
-          "isCollection": true,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
+          "id": "MainMeal"
         },
         {
-          "id": "Views",
-          "type": "integer",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
+          "id": "FirstCourse"
         },
         {
-          "id": "IdCard",
-          "type": "integer",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
-        }
-      ],
-      "references": [],
-      "values": []
-    },
-    {
-      "id": "Photo",
-      "extends": "Identifier",
-      "isAbstract": false,
-      "isEnum": false,
-      "properties": [
+          "id": "Dessert"
+        },
         {
-          "id": "Url",
-          "type": "string",
-          "isKey": false,
-          "isCollection": false,
-          "isRequired": false,
-          "minimum": 0,
-          "maximum": 0,
-          "modelProperty": ""
+          "id": "Appetizer"
         }
-      ],
-      "references": [],
-      "values": []
+      ]
     }
   ]
 }

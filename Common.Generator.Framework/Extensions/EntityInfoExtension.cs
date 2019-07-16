@@ -17,58 +17,89 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of PropertyInfo.</returns>
         public static List<PropertyInfo> GetLinkedProperties(this EntityInfo entity)
         {
-            List<PropertyInfo> result = new List<PropertyInfo>();
+            var result = new List<PropertyInfo>();
 
-            if (entity == null
-                || entity.Id == null
-                || entity.Id.Equals(""))
+            if (!entity.IsValid())
+            {
                 return result;
+            }
 
-            PropertyInfoComparer propertyComparer = new PropertyInfoComparer();
-            ReferenceInfoComparer referenceComparer = new ReferenceInfoComparer();
+            var propertyComparer = new PropertyInfoComparer();
+            var referenceComparer = new ReferenceInfoComparer();
 
-            if (entity.BaseEntity != null)
-                foreach (PropertyInfo property in entity.BaseEntity.GetLinkedProperties().AsEnumerable())
-                    if (property.Id != null
-                        && !property.Id.Equals("")
-                        && !result.AsEnumerable()
-                                  .Any(item => propertyComparer.Equals(item, property)))
+            if (entity.BaseEntity.IsValid())
+            {
+                foreach (var property in entity.BaseEntity.GetLinkedProperties())
+                {
+                    if (property.IsValid()
+                        && !result.Any(item =>
+                            propertyComparer.Equals(
+                                item,
+                                property)))
+                    {
                         result.Add(property);
+                    }
+                }
+            }
 
-            if (entity.Properties.AsEnumerable() != null)
-                foreach (PropertyInfo property in entity.Properties.AsEnumerable())
-                    if (property.Id != null
-                        && !property.Id.Equals("")
-                        && !result.AsEnumerable()
-                                  .Any(item => propertyComparer.Equals(item, property)))
+            if (entity.Properties != null)
+            {
+                foreach (var property in entity.Properties)
+                {
+                    if (property.IsValid()
+                        && !result.Any(item =>
+                            propertyComparer.Equals(
+                                item,
+                                property)))
+                    {
                         result.Add(property);
+                    }
+                }
+            }
 
-            if (entity.References.AsEnumerable() != null)
-                foreach (ReferenceInfo reference in entity.References.AsEnumerable())
-                    if (reference.Id != null
-                        && !reference.Id.Equals("")
-                        && reference.Target != null
-                        && !reference.Target.Id.Equals("")
+            if (entity.References != null)
+            {
+                foreach (var reference in entity.References)
+                {
+                    if (reference.IsValid()
+                        && reference.Target.IsValid()
                         && !reference.Target.IsAbstract
                         && !reference.IsCollection)
                     {
                         if (reference.Target.IsEnum
-                            && !result.AsEnumerable()
-                                      .Any(item => referenceComparer.Equals(item, reference)))
+                            && !result.Any(item =>
+                                referenceComparer.Equals(
+                                    item,
+                                    reference)))
+                        {
                             result.Add(reference);
+
+                        }
                         else
-                            foreach (PropertyInfo property in reference.Target.GetLinkedProperties().AsEnumerable())
-                                if (property.Id != null
-                                    && !property.Id.Equals("")
-                                    && !result.AsEnumerable()
-                                              .Any(item => propertyComparer.Equals(item, property)))
+                        {
+                            foreach (var property in reference.Target.GetLinkedProperties())
+                            {
+                                if (property.IsValid()
+                                    && !result.Any(item =>
+                                        propertyComparer.Equals(
+                                            item,
+                                            property)))
+                                {
                                     result.Add(property);
+                                }
+                            }
+                        }
                     }
-                    else if (reference.Id != null
-                             && !reference.Id.Equals("")
-                             && !result.AsEnumerable()
-                                       .Any(item => referenceComparer.Equals(item, reference)))
+                    else if (reference.IsValid()
+                             && !result.Any(item =>
+                                referenceComparer.Equals(
+                                    item,
+                                    reference)))
+                    {
                         result.Add(reference);
+                    }
+                }
+            }
 
             return result;
         }
@@ -82,39 +113,60 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of PropertyInfo.</returns>
         public static List<PropertyInfo> GetProperties(this EntityInfo entity)
         {
-            List<PropertyInfo> result = new List<PropertyInfo>();
+            var result = new List<PropertyInfo>();
 
-            if (entity == null
-                || entity.Id == null
-                || entity.Id.Equals(""))
+            if (!entity.IsValid())
+            {
                 return result;
+            }
 
-            PropertyInfoComparer propertyComparer = new PropertyInfoComparer();
-            ReferenceInfoComparer referenceComparer = new ReferenceInfoComparer();
+            var propertyComparer = new PropertyInfoComparer();
+            var referenceComparer = new ReferenceInfoComparer();
 
-            if (entity.BaseEntity != null)
-                foreach (PropertyInfo property in entity.BaseEntity.GetProperties().AsEnumerable())
-                    if (property.Id != null
-                        && !property.Id.Equals("")
-                        && !result.AsEnumerable()
-                                  .Any(item => propertyComparer.Equals(item, property)))
+            if (entity.BaseEntity.IsValid())
+            {
+                foreach (var property in entity.BaseEntity.GetProperties())
+                {
+                    if (property.IsValid()
+                        && !result.Any(item =>
+                            propertyComparer.Equals(
+                                item,
+                                property)))
+                    {
                         result.Add(property);
+                    }
+                }
+            }
 
-            if (entity.Properties.AsEnumerable() != null)
-                foreach (PropertyInfo property in entity.Properties.AsEnumerable())
-                    if (property.Id != null
-                        && !property.Id.Equals("")
-                        && !result.AsEnumerable()
-                                  .Any(item => propertyComparer.Equals(item, property)))
+            if (entity.Properties != null)
+            {
+                foreach (var property in entity.Properties)
+                {
+                    if (property.IsValid()
+                        && !result.Any(item =>
+                            propertyComparer.Equals(
+                                item,
+                                property)))
+                    {
                         result.Add(property);
+                    }
+                }
+            }
 
-            if (entity.References.AsEnumerable() != null)
-                foreach (ReferenceInfo reference in entity.References.AsEnumerable())
-                    if (reference.Id != null
-                        && !reference.Id.Equals("")
-                        && !result.AsEnumerable()
-                                  .Any(item => referenceComparer.Equals(item, reference)))
-                        result.Add(reference);
+            if (entity.References != null)
+            {
+                foreach (var reference in entity.References)
+                {
+                    if (reference.IsValid()
+                        && !result.Any(item =>
+                            referenceComparer.Equals(
+                                item,
+                                reference)))
+                    {
+                            result.Add(reference);
+                    }
+                }
+            }
 
             return result;
         }
@@ -126,23 +178,29 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetEntityDirectReferences(this EntityInfo entity)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (entity == null
-                || entity.Id == null
-                || entity.Id.Equals(""))
+            if (!entity.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (entity.References.AsEnumerable() != null)
-                foreach (ReferenceInfo reference in entity.References.AsEnumerable())
-                    if (reference.Target != null
-                        && reference.Target.Id != null
-                        && !reference.Target.Id.Equals("")
-                        && !directReferences.AsEnumerable()
-                                            .Any(item => entityComparer.Equals(item, reference.Target)))
+            if (entity.References != null)
+            {
+                foreach (var reference in entity.References)
+                {
+                    if (reference.Target.IsValid()
+                        && !directReferences.Any(item =>
+                            entityComparer.Equals(
+                                item,
+                                reference.Target)))
+                    {
                         directReferences.Add(reference.Target);
+                    }
+                }
+            }
 
             return directReferences;
         }
@@ -154,23 +212,82 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetEntityIndirectReferences(this EntityInfo entity)
         {
-            List<EntityInfo> allIndirectReferences = new List<EntityInfo>();
+            var allIndirectReferences = new List<EntityInfo>();
 
-            if (entity == null
-                || entity.Id == null
-                || entity.Id.Equals(""))
+            if (!entity.IsValid())
+            {
                 return allIndirectReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (PropertyInfo property in entity.GetLinkedProperties().AsEnumerable())
-                if (property.Id != null
-                    && !property.Id.Equals(""))
-                    allIndirectReferences = allIndirectReferences.AsEnumerable()
-                                                                 .Union(property.GetIndirectReferences().AsEnumerable(), entityComparer)
-                                                                 .ToList();
+            foreach (var property in entity.GetLinkedProperties())
+            {
+                if (property.IsValid())
+                {
+                    allIndirectReferences = allIndirectReferences
+                        .Union(
+                            property.GetIndirectReferences(),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return allIndirectReferences;
+        }
+
+        public static bool IsInherited(
+            this EntityInfo entity,
+            SchemaArray<EntityInfo> entities)
+        {
+            var entityComparer = new EntityInfoComparer();
+
+            return entities
+                .Where(e =>
+                    e.IsValid()
+                    && e.BaseEntity.IsValid()
+                    && entityComparer.Equals(
+                        entity,
+                        e.BaseEntity))
+                .Any();
+        }
+
+        public static IDictionary<string, string> ModelPropertiesTypes(this EntityInfo entity)
+        {
+            var propertyTypes = new Dictionary<string, string>();
+
+            if (!entity.IsValid())
+            {
+                return propertyTypes;
+            }
+
+            foreach (var property in entity.GetProperties())
+            {
+                var subType = property
+                    .ModelProperty
+                    .Split('.')[0];
+
+                if (!propertyTypes.ContainsKey(subType)
+                    && !string.IsNullOrEmpty(subType))
+                {
+                    propertyTypes.Add(
+                        subType,
+                        property.Id);
+                }
+            }
+
+            return propertyTypes;
+        }
+
+        public static bool IsValid(this EntityInfo entity)
+        {
+            if (entity == null
+                || !entity.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -14,19 +14,26 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionListDirectReferences(this ApiActionList apiActions)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (apiActions.AsEnumerable() == null)
+            if (!apiActions.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (ApiActionInfo apiAction in apiActions)
-                if (apiAction.Id != null
-                    && !apiAction.Id.Equals(""))
-                    directReferences = directReferences.AsEnumerable()
-                                                       .Union(apiAction.GetApiActionDirectReferences().AsEnumerable(), entityComparer)
-                                                       .ToList();
+            foreach (var apiAction in apiActions)
+            {
+                if (apiAction.IsValid())
+                {
+                    directReferences = directReferences
+                        .Union(
+                            apiAction.GetApiActionDirectReferences(),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return directReferences;
         }
@@ -38,17 +45,22 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiActionListViewModelsId(this ApiActionList apiActions)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (apiActions.AsEnumerable() == null)
+            if (!apiActions.IsValid())
+            {
                 return viewModels;
+            }
 
-            foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                if (apiAction.Id != null
-                    && !apiAction.Id.Equals(""))
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(apiAction.GetApiActionViewModelsId().AsEnumerable())
-                                           .ToList();
+            foreach (var apiAction in apiActions)
+            {
+                if (apiAction.IsValid())
+                {
+                    viewModels = viewModels
+                        .Union(apiAction.GetApiActionViewModelsId())
+                        .ToList();
+                }
+            }
 
             return viewModels;
         }
@@ -60,19 +72,26 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionListViewModelsEntities(this ApiActionList apiActions)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (apiActions.AsEnumerable() == null)
+            if (!apiActions.IsValid())
+            {
                 return viewModels;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                if (apiAction.Id != null
-                    && !apiAction.Id.Equals(""))
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable(), entityComparer)
-                                           .ToList();
+            foreach (var apiAction in apiActions)
+            {
+                if (apiAction.IsValid())
+                {
+                    viewModels = viewModels
+                        .Union(
+                            apiAction.GetApiActionViewModelsEntities(),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return viewModels;
         }
@@ -84,20 +103,27 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="layoutAction">A layout action.</param>
         /// <param name="apiActions">A list of api actions.</param>
         /// <returns>A list of ViewModels id.</returns>
-        public static List<string> GetApiActionListViewModelsId(this ApiActionList apiActions, string layoutAction)
+        public static List<string> GetApiActionListViewModelsId(
+            this ApiActionList apiActions,
+            string layoutAction)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (apiActions.AsEnumerable() == null
-                || layoutAction == null)
+            if (!apiActions.IsValid()
+                || !layoutAction.IsValid())
+            {
                 return viewModels;
+            }
 
-            foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                if (apiAction.Id != null
-                    && !apiAction.Id.Equals(""))
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(apiAction.GetApiActionViewModelsId(layoutAction).AsEnumerable())
-                                           .ToList();
+            foreach (var apiAction in apiActions)
+            {
+                if (apiAction.IsValid())
+                {
+                    viewModels = viewModels
+                        .Union(apiAction.GetApiActionViewModelsId(layoutAction))
+                        .ToList();
+                }
+            }
 
             return viewModels;
         }
@@ -110,24 +136,42 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="apiActions">A list of api actions.</param>
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiActionListViewModelsEntities(
-            this ApiActionList apiActions, string layoutAction)
+            this ApiActionList apiActions,
+            string layoutAction)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (apiActions.AsEnumerable() == null
-                || layoutAction == null)
+            if (!apiActions.IsValid()
+                || !layoutAction.IsValid())
+            {
                 return viewModels;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (ApiActionInfo apiAction in apiActions.AsEnumerable())
-                if (apiAction.Id != null
-                    && !apiAction.Id.Equals(""))
-                    viewModels = viewModels.AsEnumerable()
-                                           .Union(apiAction.GetApiActionViewModelsEntities().AsEnumerable(), entityComparer)
-                                           .ToList();
+            foreach (var apiAction in apiActions)
+            {
+                if (apiAction.IsValid())
+                {
+                    viewModels = viewModels
+                        .Union(
+                            apiAction.GetApiActionViewModelsEntities(layoutAction),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return viewModels;
+        }
+
+        public static bool IsValid(this ApiActionList apiActions)
+        {
+            if (!apiActions.IsValid<ApiActionInfo>())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

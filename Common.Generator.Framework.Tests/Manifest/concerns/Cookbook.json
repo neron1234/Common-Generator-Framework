@@ -1,0 +1,530 @@
+{
+  "id": "Cookbook",
+  "title": "Cookbook",
+  "description": "The cookbook concern containing every recipes related layouts",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "recipeDetails",
+      "title": "Recipe details",
+      "description": "Page showing the recipe's complete details",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "return",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "getRecipeDetails",
+          "type": "DataGet",
+          "target": "",
+          "api": "Recipes.GetDetails"
+        },
+        {
+          "id": "like",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Recipes.Like"
+        }
+      ],
+      "dataModel": {
+        "id": "Recipe",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "title",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.title"
+          },
+          {
+            "id": "type",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.type"
+          },
+          {
+            "id": "difficulty",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.difficulty"
+          },
+          {
+            "id": "time",
+            "type": "number",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.time"
+          },
+          {
+            "id": "cost",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.cost"
+          },
+          {
+            "id": "picture",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.picture"
+          },
+          {
+            "id": "howManyPersons",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.howManyPersons"
+          },
+          {
+            "id": "like",
+            "type": "boolean",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "recipeId",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.id"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "recipesList",
+      "title": "Recipes List",
+      "description": "A list of recipes",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "search",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "getRecipes",
+          "type": "DataList",
+          "target": "",
+          "api": "Recipes.getResumes"
+        },
+        {
+          "id": "like",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Recipes.Like"
+        },
+        {
+          "id": "toRecipeDetails",
+          "type": "Navigation",
+          "target": "Cookbook.recipeDetails",
+          "api": ""
+        },
+        {
+          "id": "toEditRecipe",
+          "type": "Navigation",
+          "target": "Cookbook.editRecipe",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "RecipeResume",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "title",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.title"
+          },
+          {
+            "id": "author",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "User.username"
+          },
+          {
+            "id": "creationDate",
+            "type": "date",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.creationDate"
+          },
+          {
+            "id": "difficulty",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.difficulty"
+          },
+          {
+            "id": "time",
+            "type": "number",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.time"
+          },
+          {
+            "id": "cost",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.cost"
+          },
+          {
+            "id": "picture",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.picture"
+          },
+          {
+            "id": "like",
+            "type": "boolean",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "recipeId",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.id"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "createRecipe",
+      "title": "Create a recipe",
+      "description": "Layout containing the recipe's creation form",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "cancel",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "save",
+          "type": "DataCreate",
+          "target": "",
+          "api": "Recipes.Save"
+        },
+        {
+          "id": "selectPicture",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "addIngredient",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "addPreparationStep",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "validateForm",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "createRecipe",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "title",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.title"
+          },
+          {
+            "id": "type",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.type"
+          },
+          {
+            "id": "difficulty",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.difficulty"
+          },
+          {
+            "id": "time",
+            "type": "number",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.time"
+          },
+          {
+            "id": "cost",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.cost"
+          },
+          {
+            "id": "picture",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.picture"
+          },
+          {
+            "id": "howManyPersons",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.howManyPersons"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "editRecipe",
+      "title": "Edit a recipe",
+      "description": "Layout containing the recipe's updating form",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "selectPicture",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "save",
+          "type": "DataUpdate",
+          "target": "",
+          "api": "Recipes.Update"
+        },
+        {
+          "id": "cancel",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "validateForm",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "addPreparationStep",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "addIngredient",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ],
+      "dataModel": {
+        "id": "updateRecipe",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "recipeId",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.id"
+          },
+          {
+            "id": "title",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.title"
+          },
+          {
+            "id": "type",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.type"
+          },
+          {
+            "id": "difficulty",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.difficulty"
+          },
+          {
+            "id": "time",
+            "type": "number",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.time"
+          },
+          {
+            "id": "cost",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.cost"
+          },
+          {
+            "id": "picture",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.picture"
+          },
+          {
+            "id": "howManyPersons",
+            "type": "integer",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "Recipe.howManyPersons"
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    }
+  ]
+}

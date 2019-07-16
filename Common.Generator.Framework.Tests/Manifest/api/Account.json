@@ -1,0 +1,165 @@
+{
+  "id": "Account",
+  "description": "Account controller to handle login/register and any account related actions",
+  "actions": [
+    {
+      "id": "Login",
+      "parameters": [
+        {
+          "id": "loginVM",
+          "type": "SignIn",
+          "dataModel": {
+            "id": "SignIn",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [
+              {
+                "id": "username",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": "User.username"
+              },
+              {
+                "id": "password",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": ""
+              }
+            ],
+            "references": [],
+            "values": []
+          }
+        }
+      ],
+      "type": "dataget",
+      "url": "/api/account/login",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "Register",
+      "parameters": [
+        {
+          "id": "registerVM",
+          "type": "SignUp",
+          "dataModel": {
+            "id": "SignUp",
+            "isAbstract": false,
+            "isEnum": false,
+            "properties": [
+              {
+                "id": "username",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": "User.username"
+              },
+              {
+                "id": "password",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": ""
+              },
+              {
+                "id": "confirmPassword",
+                "type": "string",
+                "isKey": false,
+                "isCollection": false,
+                "isRequired": false,
+                "minimum": 0,
+                "maximum": 0,
+                "modelProperty": ""
+              }
+            ],
+            "references": [],
+            "values": []
+          }
+        }
+      ],
+      "type": "datacreate",
+      "url": "/api/account/register",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    },
+    {
+      "id": "GetUserInformations",
+      "parameters": [
+        {
+          "id": "userId",
+          "type": "integer"
+        }
+      ],
+      "type": "dataget",
+      "url": "/api/account/get",
+      "allowAnonymous": false,
+      "allowedRoles": [],
+      "returnType": {
+        "id": "UserInformations",
+        "isAbstract": false,
+        "isEnum": false,
+        "properties": [
+          {
+            "id": "username",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": "User.username"
+          },
+          {
+            "id": "registeredAt",
+            "type": "date",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          },
+          {
+            "id": "userId",
+            "type": "string",
+            "isKey": false,
+            "isCollection": false,
+            "isRequired": false,
+            "minimum": 0,
+            "maximum": 0,
+            "modelProperty": ""
+          }
+        ],
+        "references": [],
+        "values": []
+      }
+    },
+    {
+      "id": "Delete",
+      "parameters": [
+        {
+          "id": "userId",
+          "type": "integer"
+        }
+      ],
+      "type": "datadelete",
+      "url": "/api/account/delete",
+      "allowAnonymous": false,
+      "allowedRoles": []
+    }
+  ]
+}

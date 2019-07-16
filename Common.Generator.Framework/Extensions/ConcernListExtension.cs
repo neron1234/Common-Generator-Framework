@@ -1,6 +1,5 @@
 ﻿using Common.Generator.Framework.Comparer;
 using Mobioos.Foundation.Jade.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,19 +14,23 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool HasMenu(this ConcernList concerns)
         {
-            bool result = false;
+            if (!concerns.IsValid())
+            {
+                return false;
+            }
 
-            if (concerns.AsEnumerable() == null)
-                return result;
-
-            foreach (ConcernInfo concern in concerns.AsEnumerable())
-                if (concern.Id != null
-                    && !concern.Id.Equals("")
-                    && concern.GetMenu().AsEnumerable()
-                                        .Count() > 0)
+            foreach (var concern in concerns)
+            {
+                if (concern.IsValid()
+                    && concern
+                        .GetMenu()
+                        .Count() > 0)
+                {
                     return true;
+                }
+            }
 
-            return result;
+            return false;
         }
 
         /// <summary>
@@ -37,19 +40,26 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetConcernListDirectReferences(this ConcernList concerns)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (concerns == null)
+            if (!concerns.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (ConcernInfo concern in concerns.AsEnumerable())
-                if (concern.Id != null
-                    && !concern.Id.Equals(""))
-                    directReferences = directReferences.AsEnumerable()
-                                                       .Union(concern.GetConcernDirectReferences().AsEnumerable(), entityComparer)
-                                                       .ToList();
+            foreach (var concern in concerns)
+            {
+                if (concern.IsValid())
+                {
+                    directReferences = directReferences
+                        .Union(
+                            concern.GetConcernDirectReferences(),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return directReferences;
         }
@@ -61,22 +71,39 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A LayoutList.</returns>
         public static LayoutList GetLayouts(this ConcernList concerns)
         {
-            LayoutList layouts = new LayoutList();
+            var layouts = new LayoutList();
 
-            if (concerns == null)
+            if (!concerns.IsValid())
+            {
                 return layouts;
+            }
 
-            LayoutInfoComparer layoutComparer = new LayoutInfoComparer();
+            var layoutComparer = new LayoutInfoComparer();
 
-            foreach (ConcernInfo concern in concerns)
-                if (concern.Id != null
-                    && !concern.Id.Equals("")
-                    && concern.Layouts != null)
-                    layouts = layouts.AsEnumerable()
-                                     .Union(concern.Layouts.ToLayoutList(concern).AsEnumerable(), layoutComparer)
-                                     .ToLayoutList();
+            foreach (var concern in concerns)
+            {
+                if (concern.IsValid()
+                    && concern.Layouts.IsValid())
+                {
+                    layouts = layouts
+                        .Union(
+                            concern.Layouts.ToLayoutList(concern),
+                            layoutComparer)
+                        .ToLayoutList();
+                }
+            }
 
             return layouts;
+        }
+
+        public static bool IsValid(this ConcernList concerns)
+        {
+            if (!concerns.IsValid<ConcernInfo>())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

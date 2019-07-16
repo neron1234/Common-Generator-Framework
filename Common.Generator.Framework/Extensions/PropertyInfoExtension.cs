@@ -14,12 +14,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A C# type in string.</returns>
         public static string CSharpType(this PropertyInfo property)
         {
-            string result = "";
-
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
-                return result;
+            if (!property.IsValid())
+            {
+                return null;
+            }
 
             return property.Type.CSharpType();
         }
@@ -31,12 +29,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A TypeScript type in string.</returns>
         public static string TypeScriptType(this PropertyInfo property)
         {
-            string result = "";
-
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
-                return result;
+            if (!property.IsValid())
+            {
+                return null;
+            }
 
             return property.Type.TypeScriptType();
         }
@@ -48,12 +44,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsPrimitiveType(this PropertyInfo property)
         {
-            bool result = false;
-
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
-                return result;
+            if (!property.IsValid())
+            {
+                return false;
+            }
 
             return property.Type.IsPrimitiveType();
         }
@@ -67,19 +61,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsEnum(this PropertyInfo property)
         {
-            bool result = false;
-
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
-                return result;
+            if (!property.IsValid())
+            {
+                return false;
+            }
 
             if (!property.IsPrimitiveType()
-                && property.Target != null
-                && !property.Target.Id.Equals("")
+                && property.Target.IsValid()
                 && property.Target.IsEnum)
+            {
                 return true;
-            return result;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -91,17 +85,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsModel(this PropertyInfo property)
         {
-            bool result = false;
-
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
-                return result;
+            if (!property.IsValid())
+            {
+                return false;
+            }
 
             if (!property.IsPrimitiveType()
                 && !property.IsEnum())
+            {
                 return true;
-            return result;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -113,30 +108,45 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetIndirectReferences(this PropertyInfo property)
         {
-            List<EntityInfo> indirectReferences = new List<EntityInfo>();
+            var indirectReferences = new List<EntityInfo>();
 
-            if (property == null
-                || property.Id == null
-                || property.Id.Equals(""))
+            if (!property.IsValid())
+            {
                 return indirectReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (property.Parent != null
-                && property.Parent.Id != null
-                && !property.Parent.Id.Equals("")
-                && !indirectReferences.AsEnumerable()
-                                      .Any(item => entityComparer.Equals(item, (EntityInfo)property.Parent)))
+            if (property.Parent.IsValid()
+                && !indirectReferences.Any(item =>
+                    entityComparer.Equals(
+                        item,
+                        (EntityInfo)property.Parent)))
+            {
                 indirectReferences.Add((EntityInfo)property.Parent);
+            }
 
-            if (property.Target != null
-                && property.Target.Id != null
-                && !property.Target.Id.Equals("")
-                && !indirectReferences.AsEnumerable()
-                                      .Any(item => entityComparer.Equals(item, property.Target)))
+            if (property.Target.IsValid()
+                && !indirectReferences.Any(item =>
+                    entityComparer.Equals(
+                        item,
+                        property.Target)))
+            {
                 indirectReferences.Add(property.Target);
+            }
 
             return indirectReferences;
+        }
+
+        public static bool IsValid(this PropertyInfo property)
+        {
+            if (property == null
+                || !property.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

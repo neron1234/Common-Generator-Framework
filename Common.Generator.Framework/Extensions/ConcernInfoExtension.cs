@@ -14,24 +14,30 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A dictionary of the menu.</returns>
         public static Dictionary<string, string> GetMenu(this ConcernInfo concern)
         {
-            Dictionary<string, string> menu = new Dictionary<string, string>();
+            var menu = new Dictionary<string, string>();
 
-            if (concern == null
-                || concern.Id == null
-                || concern.Id.Equals(""))
+            if (!concern.IsValid())
+            {
                 return menu;
+            }
 
-            if (concern.Layouts.AsEnumerable() != null)
-                foreach (LayoutInfo layout in concern.Layouts.AsEnumerable())
-                    if (layout.Id != null
-                        && !layout.Id.Equals("")
-                        && layout.Title != null
-                        && !layout.Title.Equals("")
+            if (concern.Layouts.IsValid())
+            {
+                foreach (var layout in concern.Layouts)
+                {
+                    if (layout.IsValid()
+                        && layout.Title.IsValid()
                         && layout.IsVisibleInMenu
-                        && !concern.Id.ToCamelCase().Equals("")
-                        && !layout.Id.ToCamelCase().Equals("")
-                        && !menu.Any(item => item.Key == (concern.Id.ToCamelCase() + "-" + layout.Id.ToCamelCase())))
-                        menu.Add(concern.Id.ToCamelCase() + "-" + layout.Id.ToCamelCase(), layout.Title);
+                        && !menu.Any(item =>
+                            item.Key == $"{concern.Id.ToCamelCase()}-{layout.Id.ToCamelCase()}"))
+                    {
+                        menu.Add(
+                            $"{concern.Id.ToCamelCase()}-{layout.Id.ToCamelCase()}",
+                            layout.Title);
+                    }
+                }
+            }
+
             return menu;
         }
 
@@ -42,21 +48,36 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetConcernDirectReferences(this ConcernInfo concern)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (concern == null
-                || concern.Id == null
-                || concern.Id.Equals(""))
+            if (!concern.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (concern.Layouts.AsEnumerable() != null)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(concern.Layouts.GetLayoutListDirectReferences().AsEnumerable(), entityComparer)
-                                                   .ToList();
+            if (concern.Layouts.IsValid())
+            {
+                directReferences = directReferences
+                    .Union(
+                        concern.Layouts.GetLayoutListDirectReferences(),
+                        entityComparer)
+                    .ToList();
+            }
 
             return directReferences;
+        }
+
+        public static bool IsValid(this ConcernInfo concern)
+        {
+            if (concern == null
+                || !concern.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

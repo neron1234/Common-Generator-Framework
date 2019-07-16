@@ -13,20 +13,24 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="layout">A LayoutInfo object.</param>
         /// <param name="apis">An ApiList object.</param>
         /// <returns>A list of ViewModels id.</returns>
-        public static List<string> GetLayoutViewModelsId(this LayoutInfo layout, ApiList apis)
+        public static List<string> GetLayoutViewModelsId(
+            this LayoutInfo layout,
+            ApiList apis)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (apis == null
-                || layout == null
-                || layout.Id == null
-                || layout.Id.Equals(""))
+            if (!apis.IsValid()
+                || !layout.IsValid())
+            {
                 return viewModels;
+            }
 
-            if (layout.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(layout.Actions.GetActionsViewModelsId(apis).AsEnumerable())
-                                       .ToList();
+            if (layout.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(layout.Actions.GetActionsViewModelsId(apis))
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -37,22 +41,28 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="layout">A LayoutInfo object.</param>
         /// <param name="apis">An ApiList object.</param>
         /// <returns>A list of EntityInfo.</returns>
-        public static List<EntityInfo> GetLayoutViewModelsEntities(this LayoutInfo layout, ApiList apis)
+        public static List<EntityInfo> GetLayoutViewModelsEntities(
+            this LayoutInfo layout,
+            ApiList apis)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (apis == null
-                || layout == null
-                || layout.Id == null
-                || layout.Id.Equals(""))
+            if (!apis.IsValid()
+                || !layout.IsValid())
+            {
                 return viewModels;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (layout.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(layout.Actions.GetActionsViewModelsEntities(apis).AsEnumerable(), entityComparer)
-                                       .ToList();
+            if (layout.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(
+                        layout.Actions.GetActionsViewModelsEntities(apis),
+                        entityComparer)
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -63,20 +73,24 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="layout">A LayoutInfo object.</param>
         /// <param name="apis">An ApiList object.</param>
         /// <returns>A list of services id.</returns>
-        public static List<string> GetLayoutServices(this LayoutInfo layout, ApiList apis)
+        public static List<string> GetLayoutServices(
+            this LayoutInfo layout,
+            ApiList apis)
         {
-            List<string> services = new List<string>();
+            var services = new List<string>();
 
-            if (layout == null
-                || layout.Id != null
-                || layout.Id.Equals("")
-                || apis == null)
+            if (!apis.IsValid()
+                || !layout.IsValid())
+            {
                 return services;
+            }
 
-            if (layout.Actions.AsEnumerable() != null)
-                services = services.AsEnumerable()
-                                   .Union(layout.Actions.GetActionListServices(apis).AsEnumerable())
-                                   .ToList();
+            if (layout.Actions.IsValid())
+            {
+                services = services
+                    .Union(layout.Actions.GetActionListServices(apis))
+                    .ToList();
+            }
 
             return services;
         }
@@ -88,24 +102,37 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetLayoutDirectReferences(this LayoutInfo layout)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (layout == null
-                || layout.Id == null
-                || layout.Id.Equals(""))
+            if (!layout.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (layout.DataModel != null
-                && layout.DataModel.Id != null
-                && !layout.DataModel.Id.Equals("")
-                && layout.DataModel.References.AsEnumerable() != null)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(layout.DataModel.GetEntityDirectReferences().AsEnumerable(), entityComparer)
-                                                   .ToList();
+            if (layout.DataModel.IsValid()
+                && layout.DataModel.References != null)
+            {
+                directReferences = directReferences
+                    .Union(
+                        layout.DataModel.GetEntityDirectReferences(),
+                        entityComparer)
+                    .ToList();
+            }
 
             return directReferences;
+        }
+
+        public static bool IsValid(this LayoutInfo layout)
+        {
+            if (layout == null
+                || !layout.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

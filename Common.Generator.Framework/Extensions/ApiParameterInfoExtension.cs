@@ -14,12 +14,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A C# type in string.</returns>
         public static string CSharpType(this ApiParameterInfo apiParameter)
         {
-            string result = "";
-
-            if (apiParameter == null
-                || apiParameter.Id == null
-                || apiParameter.Id.Equals(""))
-                return result;
+            if (!apiParameter.IsValid())
+            {
+                return null;
+            }
 
             return apiParameter.Type.CSharpType();
         }
@@ -31,12 +29,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A TypeScript type in string.</returns>
         public static string TypeScriptType(this ApiParameterInfo apiParameter)
         {
-            string result = "";
-
-            if (apiParameter == null
-                || apiParameter.Id == null
-                || apiParameter.Id.Equals(""))
-                return result;
+            if (!apiParameter.IsValid())
+            {
+                return null;
+            }
 
             return apiParameter.Type.TypeScriptType();
         }
@@ -48,12 +44,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsPrimitiveType(this ApiParameterInfo apiParameter)
         {
-            bool result = false;
-
-            if (apiParameter == null
-                || apiParameter.Id == null
-                || apiParameter.Id.Equals(""))
-                return result;
+            if (!apiParameter.IsValid())
+            {
+                return false;
+            }
 
             return apiParameter.Type.IsPrimitiveType();
         }
@@ -65,20 +59,18 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsModel(this ApiParameterInfo apiParameter)
         {
-            bool result = false;
-
-            if (apiParameter == null
-                || apiParameter.Id == null
-                || apiParameter.Id.Equals(""))
-                return result;
+            if (!apiParameter.IsValid())
+            {
+                return false;
+            }
 
             if (!apiParameter.IsPrimitiveType()
-                && apiParameter.DataModel != null
-                && apiParameter.DataModel.Id != null
-                && !apiParameter.DataModel.Id.Equals(""))
+                && apiParameter.DataModel.IsValid())
+            {
                 return true;
+            }
 
-            return result;
+            return false;
         }
 
         /// <summary>
@@ -88,24 +80,37 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo;</returns>
         public static List<EntityInfo> GetApiParameterDirectReferences(this ApiParameterInfo apiParameter)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (apiParameter == null
-                || apiParameter.Id == null
-                || apiParameter.Id.Equals(""))
+            if (!apiParameter.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (apiParameter.DataModel != null
-                && apiParameter.DataModel.Id != null
-                && !apiParameter.DataModel.Id.Equals("")
-                && apiParameter.DataModel.References.AsEnumerable() != null)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(apiParameter.DataModel.GetEntityDirectReferences().AsEnumerable(), entityComparer)
-                                                   .ToList();
+            if (apiParameter.DataModel.IsValid()
+                && apiParameter.DataModel.References != null)
+            {
+                directReferences = directReferences
+                    .Union(
+                        apiParameter.DataModel.GetEntityDirectReferences(),
+                        entityComparer)
+                    .ToList();
+            }
 
             return directReferences;
+        }
+
+        public static bool IsValid(this ApiParameterInfo apiParameter)
+        {
+            if (apiParameter == null
+                || !apiParameter.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

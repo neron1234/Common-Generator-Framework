@@ -1,6 +1,5 @@
 ﻿using Common.Generator.Framework.Comparer;
 using Mobioos.Foundation.Jade.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,21 +14,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>An action name.</returns>
         public static string GetAction(this ActionInfo action)
         {
-            string result = "";
+            if (!action.IsValid())
+            {
+                return null;
+            }
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals(""))
-                return result;
+            if (action.Type.IsValid()
+                && action.Api.IsValid()
+                && action.Type.IsDataAction())
+            {
+                return action.Api.Split('.')[1];
+            }
 
-            char delimiter = '.';
-
-            if (action.Type != null
-                && action.Api != null
-                && action.Type.IsDataAction()
-                && !action.Api.Equals(""))
-                return action.Api.Split(delimiter)[1];
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -39,21 +36,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A service name.</returns>
         public static string GetService(this ActionInfo action)
         {
-            string result = "";
+            if (!action.IsValid())
+            {
+                return null;
+            }
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals(""))
-                return result;
+            if (action.Type.IsValid()
+                && action.Api.IsValid()
+                && action.Type.IsDataAction())
+            {
+                return action.Api.Split('.')[0];
+            }
 
-            char delimiter = '.';
-
-            if (action.Type != null
-                && action.Api != null
-                && action.Type.IsDataAction()
-                && !action.Api.Equals(""))
-                return action.Api.Split(delimiter)[0];
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -63,20 +58,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A concern id.</returns>
         public static string GetTargetedConcern(this ActionInfo action)
         {
-            string result = "";
+            if (!action.IsValid())
+            {
+                return null;
+            }
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals(""))
-                return result;
+            if (action.Target.IsValid())
+            {
+                return action.Target.Split('.')[0];
+            }
 
-            char delimiter = '.';
-
-            if (action.Target != null
-                && !action.Target.Equals(""))
-                return action.Target.Split(delimiter)[0];
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -86,20 +78,17 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A layout id.</returns>
         public static string GetTargetedLayout(this ActionInfo action)
         {
-            string result = "";
+            if (!action.IsValid())
+            {
+                return null;
+            }
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals(""))
-                return result;
+            if (action.Target.IsValid())
+            {
+                return action.Target.Split('.')[1];
+            }
 
-            char delimiter = '.';
-
-            if (action.Target != null
-                && !action.Target.Equals(""))
-                return action.Target.Split(delimiter)[1];
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -108,23 +97,26 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="action">An ActionInfo object.</param>
         /// <param name="apis">An ApiList object.</param>
         /// <returns>A list of ViewModels id.</returns>
-        public static List<string> GetActionViewModelsId(this ActionInfo action, ApiList apis)
+        public static List<string> GetActionViewModelsId(
+            this ActionInfo action,
+            ApiList apis)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals("")
-                || apis.AsEnumerable() == null)
+            if (!action.IsValid()
+                || !apis.IsValid())
+            {
                 return viewModels;
+            }
 
-            string apiAction = action.GetAction();
+            var apiAction = action.GetAction();
 
-            if (apiAction != null
-                && !apiAction.Equals(""))
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apis.GetApiListViewModelsId(apiAction).AsEnumerable())
-                                       .ToList();
+            if (apiAction.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(apis.GetApiListViewModelsId(apiAction))
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -135,23 +127,24 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="action">An ActionInfo object.</param>
         /// <param name="apis">An ApiList object.</param>
         /// <returns>A service id.</returns>
-        public static string GetActionService(this ActionInfo action, ApiList apis)
+        public static string GetActionService(
+            this ActionInfo action,
+            ApiList apis)
         {
-            string result = "";
+            if (!action.IsValid()
+                || !apis.IsValid())
+            {
+                return null;
+            }
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals("")
-                || apis.AsEnumerable() == null)
-                return result;
+            var apiService = action.GetService();
 
-            string apiService = action.GetService();
+            if (apiService.IsValid())
+            {
+                return apis.GetApiListService(apiService);
+            }
 
-            if (apiService != null
-                && !apiService.Equals(""))
-                result = apis.GetApiListService(apiService);
-
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -159,26 +152,42 @@ namespace Common.Generator.Framework.Extensions
         /// </summary>
         /// <param name="action">An ActionInfo object.</param>
         /// <returns>A list of EntityInfo.</returns>
-        public static List<EntityInfo> GetActionViewModelsEntities(this ActionInfo action, ApiList apis)
+        public static List<EntityInfo> GetActionViewModelsEntities(
+            this ActionInfo action,
+            ApiList apis)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (action == null
-                || action.Id == null
-                || action.Id.Equals("")
-                || apis.AsEnumerable() == null)
+            if (!action.IsValid()
+                || !apis.IsValid())
+            {
                 return viewModels;
+            }
 
-            string apiAction = action.GetAction();
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var apiAction = action.GetAction();
+            var entityComparer = new EntityInfoComparer();
 
-            if (apiAction != null
-                && !apiAction.Equals(""))
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(apis.GetApiListViewModelsEntities(apiAction).AsEnumerable(), entityComparer)
-                                       .ToList();
+            if (apiAction.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(
+                        apis.GetApiListViewModelsEntities(apiAction),
+                        entityComparer)
+                    .ToList();
+            }
 
             return viewModels;
+        }
+
+        public static bool IsValid(this ActionInfo action)
+        {
+            if (action == null
+                || !action.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

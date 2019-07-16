@@ -1,43 +1,31 @@
 {
-  "id": "MeteoMeter",
-  "title": "MeteoMeter",
-  "smallTitle": "MeteoMeter",
-  "description": "MeteoMeter SmartApp",
+  "id": "Cookbook",
+  "title": "Cookbook",
+  "smallTitle": "Cookbook",
+  "description": "Simple and easy Kitchen recipes Application",
   "platforms": [
-    "BackEnd",
-    "FrontEnd"
+    "Android",
+    "Ios"
   ],
   "version": "1.0.0.0",
   "themes": [
-    "Dark",
-    "Light"
+    "Light",
+    "Dark"
   ],
   "languages": [
-    "fr",
-    "en"
+    "Fr",
+    "En"
   ],
-  "$schema": "http://meteometer.com",
+  "$schema": "https://www.cookbook.com",
   "addons": "addons.json",
   "api": [
-    "api/Group.json",
-    "api/Idea.json",
-    "api/User.json",
-    "api/Post.json",
-    "api/Flow.json",
-    "api/Highlights.json"
+    "api/Account.json",
+    "api/Recipes.json"
   ],
   "concerns": [
-    "concerns/Idea.json",
-    "concerns/Report.json",
+    "concerns/Base.json",
     "concerns/Account.json",
-    "concerns/ManageGroups.json",
-    "concerns/Flow.json",
-    "concerns/Highlights.json",
-    "concerns/Notifications.json",
-    "concerns/Posts.json",
-    "concerns/Login.json",
-    "concerns/Tabs.json",
-    "concerns/Settings.json"
+    "concerns/Cookbook.json"
   ],
   "configurations": [
     {

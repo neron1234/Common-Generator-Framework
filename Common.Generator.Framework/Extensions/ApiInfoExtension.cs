@@ -1,6 +1,5 @@
 ﻿using Common.Generator.Framework.Comparer;
 using Mobioos.Foundation.Jade.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,19 +14,23 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiDirectReferences(this ApiInfo api)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals(""))
+            if (!api.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (api.Actions.AsEnumerable() != null)
-                directReferences = directReferences.AsEnumerable()
-                                                   .Union(api.Actions.GetApiActionListDirectReferences().AsEnumerable(), entityComparer)
-                                                   .ToList();
+            if (api.Actions.IsValid())
+            {
+                directReferences = directReferences
+                    .Union(
+                        api.Actions.GetApiActionListDirectReferences(),
+                        entityComparer)
+                    .ToList();
+            }
 
             return directReferences;
         }
@@ -39,17 +42,19 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of ViewModels id.</returns>
         public static List<string> GetApiViewModelsId(this ApiInfo api)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals(""))
+            if (!api.IsValid())
+            {
                 return viewModels;
+            }
 
-            if (api.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsId().AsEnumerable())
-                                       .ToList();
+            if (api.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(api.Actions.GetApiActionListViewModelsId())
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -60,20 +65,24 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="api">An ApiInfo object.</param>
         /// <param name="layoutAction">A layout action name.</param>
         /// <returns>A list of ViewModels id.</returns>
-        public static List<string> GetApiViewModelsId(this ApiInfo api, string layoutAction)
+        public static List<string> GetApiViewModelsId(
+            this ApiInfo api,
+            string layoutAction)
         {
-            List<string> viewModels = new List<string>();
+            var viewModels = new List<string>();
 
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals("")
-                || layoutAction == null)
+            if (!api.IsValid()
+                || !layoutAction.IsValid())
+            {
                 return viewModels;
+            }
 
-            if (api.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsId(layoutAction).AsEnumerable())
-                                       .ToList();
+            if (api.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(api.Actions.GetApiActionListViewModelsId(layoutAction))
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -85,19 +94,23 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetApiViewModelsEntities(this ApiInfo api)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals(""))
+            if (!api.IsValid())
+            {
                 return viewModels;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (api.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsEntities().AsEnumerable(), entityComparer)
-                                       .ToList();
+            if (api.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(
+                        api.Actions.GetApiActionListViewModelsEntities(),
+                        entityComparer)
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -107,22 +120,28 @@ namespace Common.Generator.Framework.Extensions
         /// </summary>
         /// <param name="api">An ApiInfo object.</param>
         /// <returns>A list of EntityInfo.</returns>
-        public static List<EntityInfo> GetApiViewModelsEntities(this ApiInfo api, string layoutAction)
+        public static List<EntityInfo> GetApiViewModelsEntities(
+            this ApiInfo api,
+            string layoutAction)
         {
-            List<EntityInfo> viewModels = new List<EntityInfo>();
+            var viewModels = new List<EntityInfo>();
 
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals("")
-                || layoutAction == null)
+            if (!api.IsValid()
+                || !layoutAction.IsValid())
+            {
                 return viewModels;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            if (api.Actions.AsEnumerable() != null)
-                viewModels = viewModels.AsEnumerable()
-                                       .Union(api.Actions.GetApiActionListViewModelsEntities(layoutAction).AsEnumerable(), entityComparer)
-                                       .ToList();
+            if (api.Actions.IsValid())
+            {
+                viewModels = viewModels
+                    .Union(
+                        api.Actions.GetApiActionListViewModelsEntities(layoutAction),
+                        entityComparer)
+                    .ToList();
+            }
 
             return viewModels;
         }
@@ -133,20 +152,33 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="api">An ApiInfo object.</param>
         /// <param name="apiService">A service id.</param>
         /// <returns>A service id.</returns>
-        public static string GetApiService(this ApiInfo api, string apiService)
+        public static string GetApiService(
+            this ApiInfo api,
+            string apiService)
         {
-            string result = "";
-
-            if (api == null
-                || api.Id == null
-                || api.Id.Equals("")
-                || apiService == null)
-                return result;
+            if (!api.IsValid()
+                || !apiService.IsValid())
+            {
+                return null;
+            }
 
             if (api.Id.ToLower().Equals(apiService.ToLower()))
+            {
                 return apiService.ToPascalCase();
+            }
 
-            return result;
+            return null;
+        }
+
+        public static bool IsValid(this ApiInfo api)
+        {
+            if (api == null
+                || !api.Id.IsValid())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

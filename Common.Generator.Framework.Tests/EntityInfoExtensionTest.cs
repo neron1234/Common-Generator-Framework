@@ -15,9 +15,27 @@ namespace Common.Generator.Framework.Tests
         public void GetProperties()
         {
             var models = _smartApp.GetModels();
-            foreach (EntityInfo entity in models)
+
+            foreach (var entity in models)
             {
                 var test = entity.GetProperties();
+            }
+        }
+
+        [Fact]
+        public void IsInherited()
+        {
+            var models = _smartApp.GetModels();
+            var count = 0;
+
+            foreach (var entity in models)
+            {
+                var test = entity.IsInherited(models);
+
+                if (test)
+                {
+                    count++;
+                }
             }
         }
     }

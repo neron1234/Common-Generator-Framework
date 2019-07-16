@@ -24,6 +24,13 @@ namespace Common.Generator.Framework.Tests
         }
 
         [Fact]
+        public void GetUsedModels()
+        {
+            var models = _smartApp.GetUsedModels();
+            Assert.NotNull(models);
+        }
+
+        [Fact]
         public void GetViewModels()
         {
             var viewModels = _smartApp.GetViewModels();

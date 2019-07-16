@@ -14,19 +14,26 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A list of EntityInfo.</returns>
         public static List<EntityInfo> GetLayoutListDirectReferences(this LayoutList layouts)
         {
-            List<EntityInfo> directReferences = new List<EntityInfo>();
+            var directReferences = new List<EntityInfo>();
 
-            if (layouts.AsEnumerable() == null)
+            if (!layouts.IsValid())
+            {
                 return directReferences;
+            }
 
-            EntityInfoComparer entityComparer = new EntityInfoComparer();
+            var entityComparer = new EntityInfoComparer();
 
-            foreach (LayoutInfo layout in layouts)
-                if (layout.Id != null
-                    && !layout.Id.Equals(""))
-                    directReferences = directReferences.AsEnumerable()
-                                                       .Union(layout.GetLayoutDirectReferences().AsEnumerable(), entityComparer)
-                                                       .ToList();
+            foreach (var layout in layouts)
+            {
+                if (layout.IsValid())
+                {
+                    directReferences = directReferences
+                        .Union(
+                            layout.GetLayoutDirectReferences(),
+                            entityComparer)
+                        .ToList();
+                }
+            }
 
             return directReferences;
         }
@@ -37,19 +44,23 @@ namespace Common.Generator.Framework.Extensions
         /// <param name="layouts">A list of LayoutInfo objects.</param>
         /// <param name="parent">A ConcernInfo object.</param>
         /// <returns>A LayoutList</returns>
-        public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts, ConcernInfo parent)
+        public static LayoutList ToLayoutList(
+            this IEnumerable<LayoutInfo> layouts,
+            ConcernInfo parent)
         {
-            LayoutList result = new LayoutList();
+            var result = new LayoutList();
 
-            if (parent != null
-                && !parent.Id.Equals(""))
-                foreach (LayoutInfo layout in layouts)
-                    if (layout.Id != null
-                        && !layout.Id.Equals(""))
+            if (parent.IsValid())
+            {
+                foreach (var layout in layouts)
+                {
+                    if (layout.IsValid())
                     {
                         result.Add(layout);
                         result.Last().Parent = parent;
                     }
+                }
+            }
 
             return result;
         }
@@ -62,16 +73,28 @@ namespace Common.Generator.Framework.Extensions
         public static LayoutList ToLayoutList(this IEnumerable<LayoutInfo> layouts)
         {
             LayoutList result = new LayoutList();
-            foreach (LayoutInfo layout in layouts)
-                if (layout.Id != null
-                    && !layout.Id.Equals(""))
+
+            foreach (var layout in layouts)
+            {
+                if (layout.IsValid())
                 {
                     var parent = layout.Parent;
                     result.Add(layout);
                     result.Last().Parent = parent;
                 }
+            }
 
             return result;
+        }
+
+        public static bool IsValid(this LayoutList layouts)
+        {
+            if (!layouts.IsValid<LayoutInfo>())
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

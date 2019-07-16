@@ -12,35 +12,54 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A string converted to PascalCase.</returns>
         public static string ToPascalCase(this string word)
         {
-            string result = "";
-
-            if (word == null)
-                return result;
+            if (!word.IsValid())
+            {
+                return null;
+            }
 
             word = word.Trim();
 
             if (word.Length > 0)
             {
-                char[] separators = new char[] {' ', '-', '_', '/'};
-                string[] splittedString = word.Split(separators);
-
-                foreach (string s in splittedString.Where(s => !string.IsNullOrEmpty(s)))
+                var separators = new char[]
                 {
-                    string newS = s;
-                    newS = Regex.Replace(
-                                    newS,
-                                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                                    " $1",
-                                    RegexOptions.Compiled)
-                                .Trim();
+                    ' ',
+                    '-',
+                    '_',
+                    '/'
+                };
 
-                    newS = newS.Replace(" ", string.Empty);
-                    newS = newS.Substring(0, 1).ToUpper() + newS.Substring(1);
+                var splittedString = word.Split(separators);
+
+                var result = "";
+
+                foreach (var s in splittedString.Where(s => !string.IsNullOrEmpty(s)))
+                {
+                    var newS = s;
+
+                    newS = Regex.Replace(
+                            newS,
+                            "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                            " $1",
+                            RegexOptions.Compiled)
+                        .Trim();
+
+                    newS = newS.Replace(
+                        " ",
+                        string.Empty);
+
+                    newS = $"{newS.Substring(0, 1).ToUpper()}{newS.Substring(1)}";
+
                     result += newS;
+                }
+
+                if (result.IsValid())
+                {
+                    return result;
                 }
             }
 
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -50,42 +69,64 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A string converted to CamelCase.</returns>
         public static string ToCamelCase(this string word)
         {
-            string result = "";
-
-            if (word == null)
-                return result;
+            if (!word.IsValid())
+            {
+                return null;
+            }
 
             word = word.Trim();
 
             if (word.Length > 0)
             {
-                char[] separators = new char[] {' ', '-', '_', '/'};
-                string[] splittedString = word.Split(separators);
-                int i = 0;
-
-                foreach (string s in splittedString.Where(s => !string.IsNullOrEmpty(s)))
+                var separators = new char[]
                 {
-                    string newS = s;
-                    newS = Regex.Replace(
-                                    newS,
-                                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                                    " $1",
-                                    RegexOptions.Compiled)
-                                .Trim();
+                    ' ',
+                    '-',
+                    '_',
+                    '/'
+                };
 
-                    newS = newS.Replace(" ", string.Empty);
+                var splittedString = word.Split(separators);
+                var i = 0;
+
+                var result = "";
+
+                foreach (var s in splittedString.Where(s => !string.IsNullOrEmpty(s)))
+                {
+                    var newS = s;
+
+                    newS = Regex.Replace(
+                            newS,
+                            "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                            " $1",
+                            RegexOptions.Compiled)
+                        .Trim();
+
+                    newS = newS.Replace(
+                        " ",
+                        string.Empty);
 
                     if (i == 0)
-                        newS = newS.Substring(0, 1).ToLower() + newS.Substring(1);
+                    {
+                        newS = $"{newS.Substring(0, 1).ToLower()}{newS.Substring(1)}";
+                    }
                     else
-                        newS = newS.Substring(0, 1).ToUpper() + newS.Substring(1);
+                    {
+                        newS = $"{newS.Substring(0, 1).ToUpper()}{newS.Substring(1)}";
+                    }
 
                     i++;
+
                     result += newS;
+                }
+
+                if (result.IsValid())
+                {
+                    return result;
                 }
             }
 
-            return result;
+            return null;
         }
 
         /// <summary>
@@ -95,10 +136,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A C# type in string.</returns>
         public static string CSharpType(this string type)
         {
-            string result = "";
-
-            if (type == null)
-                return result;
+            if (!type.IsValid())
+            {
+                return null;
+            }
 
             switch (type.ToLower())
             {
@@ -128,10 +169,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A Typescript type in string.</returns>
         public static string TypeScriptType(this string type)
         {
-            string result = "";
-
-            if (type == null)
-                return result;
+            if (!type.IsValid())
+            {
+                return null;
+            }
 
             switch (type.ToLower())
             {
@@ -158,10 +199,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A TypeScript action type.</returns>
         public static string TypeScriptActionType(this string actionType)
         {
-            string result = "";
-
-            if (actionType == null)
-                return result;
+            if (!actionType.IsValid())
+            {
+                return null;
+            }
 
             switch (actionType.ToLower())
             {
@@ -187,10 +228,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsPrimitiveType(this string type)
         {
-            bool result = false;
-
-            if (type == null)
-                return result;
+            if (!type.IsValid())
+            {
+                return false;
+            }
 
             switch (type.ToLower())
             {
@@ -202,9 +243,10 @@ namespace Common.Generator.Framework.Extensions
                 case "integer":
                 case "boolean":
                 case "number":
+                case "string":
                     return true;
                 default:
-                    return result;
+                    return false;
             }
         }
 
@@ -215,10 +257,10 @@ namespace Common.Generator.Framework.Extensions
         /// <returns>A boolean.</returns>
         public static bool IsDataAction(this string actionType)
         {
-            bool result = false;
-
-            if (actionType == null)
-                return result;
+            if (!actionType.IsValid())
+            {
+                return false;
+            }
 
             switch (actionType.ToLower())
             {
@@ -229,8 +271,18 @@ namespace Common.Generator.Framework.Extensions
                 case "datadelete":
                     return true;
                 default:
-                    return result;
+                    return false;
             }
+        }
+
+        public static bool IsValid(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

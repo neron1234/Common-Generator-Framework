@@ -1,0 +1,56 @@
+{
+  "id": "Base",
+  "title": "Base",
+  "description": "Base concern containing reusable or base layouts",
+  "mandatory": false,
+  "layouts": [
+    {
+      "id": "header",
+      "title": "header",
+      "description": "Layout containing the upper banner (with app title and action buttons)",
+      "isVisibleInMenu": false,
+      "isRoot": false,
+      "actions": [
+        {
+          "id": "search",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "toCreateRecipe",
+          "type": "Navigation",
+          "target": "Cookbook.createRecipe",
+          "api": ""
+        },
+        {
+          "id": "createRecipe",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        },
+        {
+          "id": "openAccountModal",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    },
+    {
+      "id": "tabs",
+      "title": "Tabs",
+      "description": "layout containing the ever displayed tabs",
+      "isVisibleInMenu": false,
+      "isRoot": true,
+      "actions": [
+        {
+          "id": "switchTab",
+          "type": "Method",
+          "target": "",
+          "api": ""
+        }
+      ]
+    }
+  ]
+}
